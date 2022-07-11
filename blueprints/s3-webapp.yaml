@@ -1,0 +1,35 @@
+spec_version: 2
+description: Blueprint for terraform module s3-webapp
+# blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
+inputs:
+  name: {}
+  prefix: {}
+  region: {}
+# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
+outputs:
+  endpoint:
+    value: '{{ .grains.s3-webapp.outputs.endpoint }}'
+grains:
+  s3-webapp:
+    kind: terraform
+    spec:
+      source:
+        store: eks-terraform
+        path: assets/s3-webapp
+      host:
+      # Execution Host - the platform where the asset executable will run.
+      # For example, a Kubernetes cluster can be used as an execution host.
+        name: adoc-aws
+        service-account: torque-agent-sa-c13db8
+      inputs:
+      - name: '{{ .inputs.name }}'
+      - prefix: '{{ .inputs.prefix }}'
+      - region: '{{ .inputs.region }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - endpoint
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.2.4
