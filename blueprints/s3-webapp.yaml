@@ -26,7 +26,7 @@ grains:
       # Execution Host - the platform where the asset executable will run.
       # For example, a Kubernetes cluster can be used as an execution host.
         name: adoc-aws
-        service-account: torque-agent/torque-agent-sa-c13db8
+        service-account: torque-service-account
       inputs:
       - name: '{{ .inputs.name }}'
       - prefix: '{{ .inputs.prefix }}'
