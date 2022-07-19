@@ -14,6 +14,7 @@ inputs:
 # blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
 outputs:
   endpoint:
+    kind: link
     value: '{{ .grains.s3-webapp.outputs.endpoint }}'
 grains:
   s3-webapp:
