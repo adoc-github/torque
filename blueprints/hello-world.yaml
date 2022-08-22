@@ -26,6 +26,9 @@ grains:
         name: '{{ .inputs.host_name }}'
         # A service account annotated with a role ARN with permissions to run the asset
         # service-account: <service-account-name>
+        kubernetes:
+          pod-labels:
+          - aadpodidbinding: adoc-pod-identity
       inputs:
       - my_name: '{{ .inputs.my_name }}'
       # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
