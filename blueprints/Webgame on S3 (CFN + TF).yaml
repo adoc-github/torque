@@ -1,0 +1,68 @@
+spec_version: 2
+description: "S3 Bucket creation with Input and Output parameters"
+
+inputs:
+   # The access_control property is case-sensitive and must be one of the following values: 
+   # Private, PublicRead, PublicReadWrite, AuthenticatedRead, LogDeliveryWrite, BucketOwnerRead, BucketOwnerFullControl, or AwsExecRead
+  #  access_control:
+  #     type: string
+  #     description: >
+  #       Type of access to configure on Bucket objects: Private, PublicRead, PublicReadWrite, AuthenticatedRead,
+  #       LogDeliveryWrite, BucketOwnerRead, BucketOwnerFullControl, or AwsExecRead
+  #     default: "PublicRead"
+   Bucket Name:
+      type: string
+      default: my-bucket-test
+  #  external_id:
+  #     type: string
+  #     default: "my-external-id"
+   IAM Role Name:
+      description: The target AWS Account's IAM role that will be used for deployment of the CloudFormation \#
+      default: torque-cfn-agent
+      type: string
+    
+
+outputs:
+   S3 Bucket ARN:
+        value: '{{ .grains.cfn-s3-grain.outputs.Arn }}'
+   S3 Bucket Domain Name:
+        value: '{{ .grains.cfn-s3-grain.outputs.DomainName }}'
+        kind: link
+   Webgame Link:
+        value: '{{ .grains.s3-deploy-webapp.outputs.website_link }}'
+        kind: link
+
+grains:
+  cfn-s3-grain:
+    kind: cloudformation
+    spec: 
+      source:
+        # store: autogen_repo_sandbox_3416a76b
+        path: https://torque-prod-cfn-assets.s3.amazonaws.com/public-templates/AWSS3Bucket.yaml
+      region: us-east-1
+      authentication:
+        role-arn: arn:aws:iam::{{ .params.Torque_Demo_Playground_AWS }}:role/{{ .inputs["IAM Role Name"] }}
+        external-id: Torque-Deployment
+      inputs:
+        - AccessControl: PublicRead
+        - BucketName: '{{ .inputs.["Bucket Name"] }}-{{ sandboxid | downcase }}'
+      outputs:
+         - Arn
+         - DomainName
+  s3-deploy-webapp:
+    kind: terraform
+    depends-on: cfn-s3-grain
+    spec:
+      source:
+        store: assets
+        path: terraform/s3-deploy-webapp
+      host:
+        name: demo-dev
+        service-account: torque-dev-sa
+      inputs:
+      - bucket_name: '{{ .inputs.["Bucket Name"] }}-{{ sandboxid | downcase }}'
+      - region:  us-east-1
+      outputs:
+      - website_link
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.2.3
