@@ -34,10 +34,10 @@ grains:
     kind: terraform
     spec:
       source:
-        store: assets
-        path: terraform/rds
+        store: eks-terraform
+        path: assets/rds
       host:
-        name: demo-dev
+        name: adoc-eks
         service-account: torque-dev-sa
       inputs:
         - sandbox_id: '{{ sandboxid | downcase }}'
@@ -48,7 +48,7 @@ grains:
         - engine: MySQL
         - username: adminuser
         - vpc_id: vpc-02e3bca90b081cd0f
-        - region: us-east-1
+        - region: ap-northeast-1
       outputs:
         - hostname
         - connection_string
@@ -57,13 +57,13 @@ grains:
     kind: terraform
     spec: 
       source:
-        store: assets
-        path: terraform/s3
+        store: eks-terraform
+        path: assets/s3
       host:
-        name: demo-dev
+        name: adoc-eks
         service-account: torque-dev-sa
       inputs:
-        - region: eu-west-1
+        - region: ap-northeast-1
         - acl: public-read
         - name: 'robotshop-s3-{{ sandboxid | downcase }}'
       outputs:
@@ -74,10 +74,10 @@ grains:
     depends-on: mySqlDB, s3Bucket
     spec:
       source:
-        store: assets
-        path: robotShop
+        store: eks-terraform
+        path: assets/robotShop
       host:
-        name: demo-dev
+        name: adoc-eks
       # commands:
       #   - "dep up xxx"
 

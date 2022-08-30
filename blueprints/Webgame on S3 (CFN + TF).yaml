@@ -38,8 +38,8 @@ grains:
     spec: 
       source:
         # store: autogen_repo_sandbox_3416a76b
-        path: https://torque-prod-cfn-assets.s3.amazonaws.com/public-templates/AWSS3Bucket.yaml
-      region: us-east-1
+        path: https://colony-repository.s3.ap-northeast-1.amazonaws.com/CloudFormation/AWSS3Bucket.yaml
+      region: ap-northeast-1
       authentication:
         role-arn: arn:aws:iam::{{ .params.Torque_Demo_Playground_AWS }}:role/{{ .inputs["IAM Role Name"] }}
         external-id: Torque-Deployment
@@ -54,14 +54,14 @@ grains:
     depends-on: cfn-s3-grain
     spec:
       source:
-        store: assets
-        path: terraform/s3-deploy-webapp
+        store: eks-terraform
+        path: assets/s3-deploy-webapp
       host:
-        name: demo-dev
+        name: adoc-eks
         service-account: torque-dev-sa
       inputs:
       - bucket_name: '{{ .inputs.["Bucket Name"] }}-{{ sandboxid | downcase }}'
-      - region:  us-east-1
+      - region:  ap-northeast-1
       outputs:
       - website_link
     # The terraform version that will be used to deploy the module
