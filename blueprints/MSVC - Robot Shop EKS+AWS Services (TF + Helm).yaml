@@ -38,7 +38,7 @@ grains:
         path: assets/rds
       host:
         name: adoc-eks
-        service-account: torque-dev-sa
+        service-account: torque-service-account
       inputs:
         - sandbox_id: '{{ sandboxid | downcase }}'
         - size: '{{ .inputs.db_size }}' 
@@ -61,7 +61,7 @@ grains:
         path: assets/s3
       host:
         name: adoc-eks
-        service-account: torque-dev-sa
+        service-account: torque-service-account
       inputs:
         - region: ap-northeast-1
         - acl: public-read

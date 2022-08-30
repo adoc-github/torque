@@ -58,7 +58,7 @@ grains:
         path: assets/s3-deploy-webapp
       host:
         name: adoc-eks
-        service-account: torque-dev-sa
+        service-account: torque-service-account
       inputs:
       - bucket_name: '{{ .inputs.["Bucket Name"] }}-{{ sandboxid | downcase }}'
       - region:  ap-northeast-1
