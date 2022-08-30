@@ -41,7 +41,7 @@ grains:
         path: https://colony-repository.s3.ap-northeast-1.amazonaws.com/CloudFormation/AWSS3Bucket.yaml
       region: ap-northeast-1
       authentication:
-        role-arn: arn:aws:iam::{{ .params.Torque_Demo_Playground_AWS }}:role/{{ .inputs["IAM Role Name"] }}
+        role-arn: 'arn:aws:iam::{{ .params.Torque_Demo_Playground_AWS }}:role/{{ .inputs["IAM Role Name"] }}'
         external-id: Torque-Deployment
       inputs:
         - AccessControl: PublicRead
