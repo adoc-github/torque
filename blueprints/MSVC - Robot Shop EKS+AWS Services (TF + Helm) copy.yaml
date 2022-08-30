@@ -26,8 +26,6 @@ outputs:
   WebsiteUrl:
     value: 'robotshop-{{ sandboxid | downcase }}.torque-demo.click:8080'
     kind: link
-  DB_Hostname:
-    value: '{{ .grains.mySqlDB.outputs.hostname }}'
 
 grains:
   s3Bucket:
