@@ -78,6 +78,7 @@ grains:
         path: assets/robotShop
       host:
         name: adoc-eks
+        service-account: default
       # commands:
       #   - "dep up xxx"
 
