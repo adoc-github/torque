@@ -13,9 +13,9 @@ inputs:
    BucketName:
       type: string
       default: my-bucket-test
-  region:
-    type: string
-    default: ap-northeast-1    
+   region:
+      type: string
+      default: ap-northeast-1    
 
 outputs:
    S3 Bucket ARN:
