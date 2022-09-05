@@ -24,7 +24,7 @@ inputs:
 # values that starts with '{' for liquid template must be encosed with quotes so YAML won't consider them as dict
 outputs:
   WebsiteUrl:
-    value: 'robotshop-{{ sandboxid | downcase }}.torque-demo.click:8080'
+    value: 'http://{{.grains.robotShopMicroservices.scripts.post-helm-install.outputs.frontend}}:8080'
     kind: link
   DB_Hostname:
     value: '{{ .grains.mySqlDB.outputs.hostname }}'
@@ -81,7 +81,13 @@ grains:
         service-account: adoc-sa
       # commands:
       #   - "dep up xxx"
-
+      scripts:
+        post-helm-install:
+          source:
+            store: eks-terraform
+            path:  assets/shell-scripts/get-robot-web-address.sh
+          outputs:
+            - frontend
       inputs:
         - hostname: 'robotshop-{{ sandboxid | downcase }}'
         - domain: 'torque-demo.click'
