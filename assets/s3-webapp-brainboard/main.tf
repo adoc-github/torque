@@ -6,7 +6,6 @@ resource "aws_s3_bucket" "bucket" {
 
   tags = {
     env      = "Development"
-    archUUID = "8efcff31-b27a-4d11-b8f1-eb9f21485c16"
   }
 }
 
@@ -58,6 +57,5 @@ resource "aws_s3_bucket_object" "webapp" {
 
   tags = {
     env      = "Development"
-    archUUID = "8efcff31-b27a-4d11-b8f1-eb9f21485c16"
   }
 }
