@@ -77,7 +77,8 @@ resource "aws_db_instance" "default" {
   storage_type         = var.storage_type
   engine               = var.engine
   engine_version       = var.engine_version
-  instance_class       = local.instance_class
+  # instance_class       = local.instance_class
+  instance_class       = "db.t4g.medium"
   identifier           = "rds-${var.sandbox_id}"
   name                 = "${var.db_name}"
   username             = "${var.username}"
