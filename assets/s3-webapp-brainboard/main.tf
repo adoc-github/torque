@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "bucket" {
   bucket        = "${var.prefix}-${var.name}"
 
   tags = {
-    env      = "Development"
+    env      = "Test"
   }
 }
 
@@ -56,6 +56,6 @@ resource "aws_s3_bucket_object" "webapp" {
   acl          = "public-read"
 
   tags = {
-    env      = "Development"
+    env      = "Test"
   }
 }
