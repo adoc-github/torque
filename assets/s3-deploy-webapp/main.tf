@@ -14,7 +14,7 @@ provider "aws" {
 }
 
 data "aws_s3_bucket" "target_bucket" {
-  bucket = "${var.bucket_name}"
+  bucket = "${var.bucket_name}-demo"
 }
 
 data "http" "website_file" {
