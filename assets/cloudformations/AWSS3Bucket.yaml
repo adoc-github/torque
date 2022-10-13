@@ -18,6 +18,8 @@ Outputs:
     Value: !GetAtt 
       - MyBucket
       - DomainName
+  BucketName:
+    Value: !Ref MyBucket
 Description: Creates an S3 Bucket
 Resources:
   MyBucket:
