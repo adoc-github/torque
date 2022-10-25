@@ -3,6 +3,7 @@
 resource "aws_s3_bucket" "bucket" {
   force_destroy = true
   bucket        = "${var.prefix}-${var.name}"
+  acl    = "public-read"
 
   tags = {
     env      = "Test"
@@ -21,10 +22,10 @@ resource "aws_s3_bucket_website_configuration" "bucket" {
   }
 }
 
-resource "aws_s3_bucket_acl" "bucket" {
-  bucket = aws_s3_bucket.bucket.id
-  acl    = "public-read"
-}
+# resource "aws_s3_bucket_acl" "bucket" {
+#   bucket = aws_s3_bucket.bucket.id
+#   acl    = "public-read"
+# }
 
 resource "aws_s3_bucket_policy" "policy" {
   policy = <<EOF
