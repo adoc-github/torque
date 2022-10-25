@@ -14,3 +14,9 @@ variable "instance_type" {
   #   error_message = "Instance Type not recognized. Options: t1.micro, t2.micro"
   # }
 }
+
+variable "region" {
+    description = "Region where to create resources" 
+    type = string
+    default = "eu-west-1"
+}
