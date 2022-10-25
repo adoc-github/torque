@@ -10,7 +10,7 @@ variable "instance_type" {
   type = string
 
   validation {
-    condition = contains(["t1.micro", "t2.micro"], lower(var.storage_type))
+    condition = contains(["t1.micro", "t2.micro"], lower(var.instance_type))
     error_message = "Instance Type not recognized. Options: t1.micro, t2.micro"
   }
 }
