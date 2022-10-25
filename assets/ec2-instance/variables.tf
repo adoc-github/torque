@@ -9,8 +9,8 @@ variable "instance_type" {
   default = "t2.micro"
   type = string
 
-  validation {
-    condition = contains(["t1.micro", "t2.micro"], lower(var.instance_type))
-    error_message = "Instance Type not recognized. Options: t1.micro, t2.micro"
-  }
+  # validation {
+  #   condition = contains(["t1.micro", "t2.micro"], lower(var.instance_type))
+  #   error_message = "Instance Type not recognized. Options: t1.micro, t2.micro"
+  # }
 }
