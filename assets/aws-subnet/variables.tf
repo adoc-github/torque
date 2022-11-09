@@ -16,6 +16,12 @@ variable "name" {
   default     = ""
 }
 
+variable "subnet_names" {
+  description = "Explicit values to use in the Name tag on public subnets. If empty, Name tags are generated."
+  type        = list(string)
+  default     = []
+}
+
 variable "subnet_suffix" {
   description = "Suffix to append to public subnets name"
   type        = string
@@ -26,6 +32,12 @@ variable "enable_ipv6" {
   description = "Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block."
   type        = bool
   default     = false
+}
+
+variable "ipv6_cidr_block" {
+  description = "IPv6 CIDR Blocks"
+  type        = list(string)
+  default     = []
 }
 
 variable "subnet_ipv6_prefixes" {
