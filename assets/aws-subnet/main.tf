@@ -21,7 +21,7 @@ resource "aws_subnet" "this" {
   map_public_ip_on_launch         = var.map_public_ip_on_launch
   assign_ipv6_address_on_creation = var.subnet_assign_ipv6_address_on_creation == null ? var.assign_ipv6_address_on_creation : var.subnet_assign_ipv6_address_on_creation
 
-  ipv6_cidr_block = var.enable_ipv6 && length(var.subnet_ipv6_prefixes) > 0 ? cidrsubnet(aws_vpc.this[0].ipv6_cidr_block, 8, var.subnet_ipv6_prefixes[count.index]) : null
+  ipv6_cidr_block = var.enable_ipv6 && length(var.subnet_ipv6_prefixes) > 0 ? element(concat(var.ipv6_cidr_block, [""]), count.index) : null
 
   tags = merge(
     {
