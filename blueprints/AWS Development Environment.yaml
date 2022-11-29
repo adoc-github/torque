@@ -1,5 +1,5 @@
 spec_version: 2
-description: Auto generated blueprint for terraform module aws-vpc
+description: ADOC original blueprint.
 # blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
 inputs:
   region:
@@ -53,6 +53,7 @@ grains:
 
   aws-subnet:
     kind: terraform
+    depends_on: aws-vpc
     spec:
       source:
         store: eks-terraform
