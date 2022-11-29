@@ -21,8 +21,8 @@ inputs:
     type: execution-host
 # blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
 outputs:
-  vpc_id:
-    value: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+  # vpc_id:
+  #   value: '{{ .grains.aws-vpc.outputs.vpc_id }}'
   subnet_id:
     value: '{{ .grains.aws-subnet.outputs.subnets }}'
 grains:
