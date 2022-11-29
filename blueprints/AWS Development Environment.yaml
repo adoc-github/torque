@@ -1,0 +1,79 @@
+spec_version: 2
+description: Auto generated blueprint for terraform module aws-vpc
+# blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
+inputs:
+  region:
+    type: string
+    default: ap-northeast-1
+  vpc_name:
+    type: string
+    default: terraform_vpc
+  vpc_cidr:
+    type: string
+    default: 10.0.0.0/24
+  subnet_name:
+    type: string
+    default: terraform_subnet
+  subnet_cidr:
+    type: string
+    default: '["10.0.0.0/28"]'
+  host_name:
+    type: execution-host
+# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
+outputs:
+  vpc_id:
+    value: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+  subnet_id:
+    value: '{{ .grains.aws-subnet.outputs.subnets }}'
+grains:
+  aws-vpc:
+    kind: terraform
+    spec:
+      source:
+        store: eks-terraform
+        path: assets/aws-vpc
+      host:
+      # Execution Host - the platform where the asset executable will run.
+      # For example, a Kubernetes cluster can be used as an execution host.
+        name: '{{ .inputs.host_name }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - cidr: '{{ .inputs.vpc_cidr }}'
+      - name: '{{ .inputs.vpc_name }}'
+      - region: '{{ .inputs.region }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - vpc_id
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.3.4
+
+  aws-subnet:
+    kind: terraform
+    spec:
+      source:
+        store: eks-terraform
+        path: assets/aws-subnet
+      host:
+      # Execution Host - the platform where the asset executable will run.
+      # For example, a Kubernetes cluster can be used as an execution host.
+        name: '{{ .inputs.host_name }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - name: '{{ .inputs.subnet_name }}'
+      - region: '{{ .inputs.region }}'
+      - subnets: '{{ .inputs.subnet_cidr }}'
+      - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+      - azs: '["ap-northeast-1a"]'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - subnets
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.3.4
