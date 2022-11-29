@@ -53,7 +53,7 @@ grains:
 
   aws-subnet:
     kind: terraform
-    depends_on: aws-vpc
+    depends-on: aws-vpc
     spec:
       source:
         store: eks-terraform
