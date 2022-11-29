@@ -68,7 +68,7 @@ grains:
       - name: '{{ .inputs.subnet_name }}'
       - region: '{{ .inputs.region }}'
       - subnets: '{{ .inputs.subnet_cidr }}'
-      - vpc_id: '{{.grains.aws-vpc.outputs.vpc_id}}'
+      - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
       - azs: '["ap-northeast-1a"]'
       # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
       # env-vars:
