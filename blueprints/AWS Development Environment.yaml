@@ -77,4 +77,4 @@ grains:
       outputs:
       - subnets
     # The terraform version that will be used to deploy the module
-    tf-version: 1.3.4
+    tf-version: 0.14.11
