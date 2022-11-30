@@ -17,6 +17,9 @@ inputs:
   subnet_cidr:
     type: string
     default: '["10.0.0.0/28"]'
+  igw_name:
+    type: string
+    default: terraform_igw
   execution_host:
     type: execution-host
 # blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
@@ -25,6 +28,8 @@ outputs:
     value: '{{ .grains.aws-vpc.outputs.vpc_id }}'
   subnet_id:
     value: '{{ .grains.aws-subnet.outputs.subnets }}'
+  igw_id:
+    value: '{{ .grains.aws_internet_gateway.outputs.igw_id }}'
 grains:
   aws-vpc:
     kind: terraform
@@ -50,6 +55,32 @@ grains:
       - vpc_id
     # The terraform version that will be used to deploy the module
     tf-version: 1.3.4
+
+  aws_internet_gateway:
+    kind: terraform
+    depends-on: aws-vpc
+    spec:
+      source:
+        store: torque-bps
+        path: assets/aws_internet_gateway
+      host:
+      # Execution Host - the platform where the asset executable will run.
+      # For example, a Kubernetes cluster can be used as an execution host.
+        name: '{{ .inputs.execution_host }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - name: '{{ .inputs.igw_name }}'
+      - region: '{{ .inputs.region }}'
+      - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - igw_id
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.3.5
 
   aws-subnet:
     kind: terraform
@@ -77,4 +108,4 @@ grains:
       outputs:
       - subnets
     # The terraform version that will be used to deploy the module
-    tf-version: 0.14.11
+    tf-version: 1.3.4
