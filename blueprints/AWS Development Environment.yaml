@@ -59,13 +59,13 @@ grains:
     # The terraform version that will be used to deploy the module
     tf-version: 1.3.4
 
-  aws_internet_gateway:
+  aws-internet-gateway:
     kind: terraform
     depends-on: aws-vpc
     spec:
       source:
         store: torque-bps
-        path: assets/aws_internet_gateway
+        path: assets/aws-internet-gateway
       host:
       # Execution Host - the platform where the asset executable will run.
       # For example, a Kubernetes cluster can be used as an execution host.
