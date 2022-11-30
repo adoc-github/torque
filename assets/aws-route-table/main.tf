@@ -14,7 +14,7 @@ provider "aws" {
 resource "aws_route_table" "this" {
   count = var.create_route_table ? 1 : 0
 
-  vpc_id           = local.vpc_id
+  vpc_id           = var.vpc_id
   propagating_vgws = var.route_table_propagating_vgws
 
   dynamic "route" {

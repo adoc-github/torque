@@ -16,6 +16,12 @@ variable "name" {
   default     = ""
 }
 
+variable "vpc_id" {
+  description = "VPC ID"
+  type        = string
+  default     = ""
+}
+
 variable "route_table_propagating_vgws" {
   description = "List of virtual gateways for propagation"
   type        = list(string)
