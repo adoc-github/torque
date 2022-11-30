@@ -1,5 +1,6 @@
 spec_version: 2
 description: ADOC original blueprint.
+
 # blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
 inputs:
   region:
@@ -22,6 +23,7 @@ inputs:
     default: terraform_igw
   execution_host:
     type: execution-host
+
 # blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
 outputs:
   vpc_id:
@@ -30,6 +32,7 @@ outputs:
     value: '{{ .grains.aws-subnet.outputs.subnets }}'
   igw_id:
     value: '{{ .grains.aws_internet_gateway.outputs.igw_id }}'
+
 grains:
   aws-vpc:
     kind: terraform
