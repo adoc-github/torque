@@ -31,7 +31,7 @@ outputs:
   subnet_id:
     value: '{{ .grains.aws-subnet.outputs.subnets }}'
   igw_id:
-    value: '{{ .grains.aws_internet_gateway.outputs.igw_id }}'
+    value: '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
 
 grains:
   aws-vpc:
