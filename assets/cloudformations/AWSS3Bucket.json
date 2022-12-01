@@ -11,7 +11,7 @@
 		"Description" : "Logical Bucket Name"
 	  }
 	},
-	"Output" : {
+	"Outputs" : {
 	  "Arn" : {
 		"Description": "The Bucket Arn",  
 		"Value" : { "Fn::GetAtt" : [ "MyBucket", "Arn" ]}
