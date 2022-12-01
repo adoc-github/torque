@@ -1,5 +1,5 @@
 {
-	"Parameters" : {
+	"Parameter" : {
 	  "AccessControl" : {
 		"Type" : "String",
 		"Default" : "PublicRead",
