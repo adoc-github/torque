@@ -22,7 +22,7 @@
 	  }
 	},
 	"Description": "Creates an S3 Bucket",
-	"Resource":
+	"Resources":
 	{
 		"MyBucket":{
 			"Type": "AWS::S3::Bucket",
