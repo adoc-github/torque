@@ -29,14 +29,14 @@ variable "self" {
 }
 
 variable "cidr_blocks" {
-  description = "List of ingress rules to create where 'cidr_blocks' is used"
-  type        = list(map(string))
+  description = "List of IPv4 CIDR ranges to use on all ingress rules"
+  type        = list(string)
   default     = []
 }
 
 variable "ipv6_cidr_blocks" {
-  description = "List of ingress rules to create where 'ipv6_cidr_blocks' is used"
-  type        = list(map(string))
+  description = "List of IPv6 CIDR ranges to use on all ingress rules"
+  type        = list(string)
   default     = []
 }
 
