@@ -136,7 +136,7 @@ grains:
           [
             {
               "cidr_block": "0.0.0.0/0",
-              "gateway_id": '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
+              "gateway_id": {{ .grains.aws-internet-gateway.outputs.igw_id }}
             }
           ]
       - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
