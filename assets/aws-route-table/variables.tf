@@ -24,14 +24,14 @@ variable "vpc_id" {
 
 variable "route_table_propagating_vgws" {
   description = "List of virtual gateways for propagation"
-  type        = list(map(string))
-  default     = [{"cidr_block" = "0.0.0.0/0", "gateway_id" = "igw-00000000000000000"}]
+  type        = list(string)
+  default     = []
 }
 
 variable "route_table_routes" {
   description = "Configuration block of routes. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_route_table#route"
   type        = list(map(string))
-  default     = []
+  default     = [{"cidr_block" = "0.0.0.0/0", "gateway_id" = "igw-00000000000000000"}]
 }
 
 variable "tags" {
