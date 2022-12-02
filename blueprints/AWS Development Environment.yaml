@@ -32,9 +32,11 @@ outputs:
   vpc_id:
     value: '{{ .grains.aws-vpc.outputs.vpc_id }}'
   subnet_id:
-    value: '{{ .grains.aws-subnet.outputs.subnets }}'
-  igw_id:
+    value: '{{ .grains.aws-subnet.outputs.subnet_id }}'
+  internet_gateway_id:
     value: '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
+  route_table_id:
+    value: '{{ .grains.aws-route-table.outputs.route_table_id }}'
 
 grains:
   aws-vpc:
@@ -112,7 +114,7 @@ grains:
       # - VAR_NAME: var value
       env-vars: []
       outputs:
-      - subnets
+      - subnet_id
     # The terraform version that will be used to deploy the module
     tf-version: 1.3.4
 
@@ -145,6 +147,6 @@ grains:
       # - VAR_NAME: var value
       env-vars: []
       outputs:
-      - route_table_ids
+      - route_table_id
     # The terraform version that will be used to deploy the module
     tf-version: 1.3.5
