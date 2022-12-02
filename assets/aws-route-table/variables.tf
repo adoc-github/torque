@@ -24,8 +24,8 @@ variable "vpc_id" {
 
 variable "route_table_propagating_vgws" {
   description = "List of virtual gateways for propagation"
-  type        = list(string)
-  default     = [{"cidr_block" = "0.0.0.0/0", "gateway_id" = "igw-00000000"}]
+  type        = list(map(string))
+  default     = [{"cidr_block" = "0.0.0.0/0", "gateway_id" = "igw-00000000000000000"}]
 }
 
 variable "route_table_routes" {
