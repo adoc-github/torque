@@ -18,9 +18,12 @@ inputs:
   subnet_cidr:
     type: string
     default: '["10.0.0.0/28"]'
-  igw_name:
+  internet_gateway_name:
     type: string
     default: terraform_igw
+  route_table_name:
+    type: string
+    default: terraform_rt
   execution_host:
     type: execution-host
 
@@ -73,7 +76,7 @@ grains:
         # A service account annotated with a role ARN with permissions to run the asset
         # service-account: <service-account-name>
       inputs:
-      - name: '{{ .inputs.igw_name }}'
+      - name: '{{ .inputs.internet_gateway_name }}'
       - region: '{{ .inputs.region }}'
       - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
       # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
@@ -112,3 +115,36 @@ grains:
       - subnets
     # The terraform version that will be used to deploy the module
     tf-version: 1.3.4
+
+  aws-route-table:
+    kind: terraform
+    depends-on: aws-vpc, aws-internet-gateway
+    spec:
+      source:
+        store: torque-bps
+        path: assets/aws-route-table
+      host:
+      # Execution Host - the platform where the asset executable will run.
+      # For example, a Kubernetes cluster can be used as an execution host.
+        name: '{{ .inputs.execution_host }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - name: '{{ .inputs.route_table_name }}'
+      - region: '{{ .inputs.region }}'
+      - route_table_routes: >-
+          [
+            {
+              "cidr_block": "0.0.0.0/0",
+              "gateway_id": '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
+            }
+          ]
+      - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - route_table_ids
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.3.5
