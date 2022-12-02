@@ -24,6 +24,24 @@ inputs:
   route_table_name:
     type: string
     default: terraform_rt
+  security_group_name:
+    type: string
+    default: terraform_sg
+  sg_rule_type:
+    type: string
+    default: ingress
+  sg_rule_protocol:
+    type: string
+    default: tcp
+  sg_rule_from_port:
+    type: string
+    default: 22
+  sg_rule_to_port:
+    type: string
+    default: 22
+  sg_rule_cidr_blocks:
+    type: string
+    default: '["118.83.58.210/32"]'
   execution_host:
     type: execution-host
 
@@ -37,6 +55,8 @@ outputs:
     value: '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
   route_table_id:
     value: '{{ .grains.aws-route-table.outputs.route_table_id }}'
+  security_group_id:
+    value: '{{ .grains.aws-security-group.outputs.security_group_id }}'
 
 grains:
   aws-vpc:
@@ -150,3 +170,59 @@ grains:
       - route_table_id
     # The terraform version that will be used to deploy the module
     tf-version: 1.3.5
+
+  aws-security-group:
+    kind: terraform
+    depends-on: aws-vpc
+    spec:
+      source:
+        store: torque-bps
+        path: assets/aws-security-group
+      host:
+      # Execution Host - the platform where the asset executable will run.
+      # For example, a Kubernetes cluster can be used as an execution host.
+        name: '{{ .inputs.execution_host }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - name: '{{ .inputs.security_group_name }}'
+      - region: '{{ .inputs.region }}'
+      - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - security_group_id
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.3.6
+
+  aws-security-group-rule:
+    kind: terraform
+    depends-on: aws-security-group
+    spec:
+      source:
+        store: torque-bps
+        path: assets/aws-security-group-rule
+      host:
+      # Execution Host - the platform where the asset executable will run.
+      # For example, a Kubernetes cluster can be used as an execution host.
+        name: '{{ .inputs.execution_host }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - region: '{{ .inputs.region }}'
+      - security_group_id: '{{ .grains.aws-security-group.outputs.security_group_id }}'
+      - type: '{{ .inputs.sg_rule_type }}'
+      - protocol: '{{ .inputs.sg_rule_protocol }}'
+      - from_port: '{{ .inputs.sg_rule_from_port }}'
+      - to_port: '{{ .inputs.sg_rule_to_port }}'
+      - cidr_blocks: '{{ .inputs.sg_rule_cidr_blocks }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs: []
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.3.6
+
