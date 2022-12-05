@@ -10,6 +10,11 @@ variable "create_route" {
   default     = true
 }
 
+variable "route_table_id" {
+  description = "Ruoute table ID"
+  type        = string
+  default     = ""
+}
 
 variable "destination_cidr_block" {
   description = "The IPv4 CIDR block for the Route."
