@@ -1,6 +1,6 @@
 output "subnet_id" {
   description = "List of IDs of public subnets"
-  value       = aws_subnet.this[*].id
+  value       = aws_subnet.this[0].id
 }
 
 output "subnet_arn" {
