@@ -267,10 +267,10 @@ grains:
         # A service account annotated with a role ARN with permissions to run the asset
         # service-account: <service-account-name>
       inputs:
-      - instance_ami: '{{ .inputs.instance_ami }}'
-      - instance_associate_public_ip_address: '{{ .inputs.instance_associate_public_ip_address }}'
+      - ami: '{{ .inputs.instance_ami }}'
+      - associate_public_ip_address: '{{ .inputs.instance_associate_public_ip_address }}'
       - instance_type: '{{ .inputs.instance_type }}'
-      - instance_key_name: '{{ .inputs.instance_key_name }}'
+      - key_name: '{{ .inputs.instance_key_name }}'
       - instance_name: '{{ .inputs.instance_name }}'
       - region: '{{ .inputs.region }}'
       - subnet_id: '{{ .grains.aws-subnet.outputs.subnet_id }}'
