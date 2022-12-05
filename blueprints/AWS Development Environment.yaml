@@ -271,7 +271,7 @@ grains:
       - associate_public_ip_address: '{{ .inputs.instance_associate_public_ip_address }}'
       - instance_type: '{{ .inputs.instance_type }}'
       - key_name: '{{ .inputs.instance_key_name }}'
-      - instance_name: '{{ .inputs.instance_name }}'
+      - name: '{{ .inputs.instance_name }}'
       - region: '{{ .inputs.region }}'
       - subnet_id: '{{ .grains.aws-subnet.outputs.subnet_id }}'
       - vpc_security_group_ids: "[{{ .grains.aws-security-group.outputs.security_group_id }}]"
