@@ -295,7 +295,7 @@ grains:
     spec: 
       source:
         store: torque-bps
-        path: blueprints/AWS RT Routes
+        path: blueprints/AWS_RT_Routes
       host:
         name: '{{ .inputs.execution_host }}'
       inputs:
