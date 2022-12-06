@@ -297,3 +297,5 @@ grains:
         - destination_cidr_block: 0.0.0.0/0
         - gateway_id: '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
         - excution_host: '{{ .inputs.execution_host }}'
+      outputs:
+      - route_id
