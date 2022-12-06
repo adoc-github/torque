@@ -1,0 +1,39 @@
+spec_version: 2
+description: Auto generated blueprint for terraform module hello-world
+# blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
+inputs:
+  my_name:
+    type: string
+    default: John Doe
+  host_name:
+    type: execution-host
+# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
+outputs:
+  message:
+    value: '{{ .grains.hello-world.outputs.message }}'
+  url:
+    value: '{{ .grains.hello-world.outputs.url }}'
+grains:
+  hello-world:
+    kind: terraform
+    spec:
+      source:
+        store: torque-bps
+        path: assets/hello-world
+      host:
+      # Execution Host - the platform where the asset executable will run.
+      # For example, a Kubernetes cluster can be used as an execution host.
+        name: '{{ .inputs.host_name }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - my_name: '{{ .inputs.my_name }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - message
+      - url
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.3.6
