@@ -181,13 +181,6 @@ grains:
       inputs:
       - name: '{{ .inputs.route_table_name }}'
       - region: '{{ .inputs.region }}'
-      # - route_table_routes: >-
-      #     [
-      #       {
-      #         "cidr_block": "0.0.0.0/0",
-      #         "gateway_id": {{ .grains.aws-internet-gateway.outputs.igw_id }}
-      #       }
-      #     ]
       - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
       # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
       # env-vars:
@@ -289,18 +282,18 @@ grains:
     # The terraform version that will be used to deploy the module
     tf-version: 1.3.5
 
-  # aws-rt-routes:
-  #   kind: blueprint
-  #   depends-on: aws-internet-gateway, aws-route-table
-  #   spec: 
-  #     source:
-  #       store: torque-bps
-  #       path: blueprints/AWS_RT_Routes
-  #     host:
-  #       name: '{{ .inputs.execution_host }}'
-  #     inputs:
-  #       - region: '{{ .inputs.region }}'
-  #       - route_table_id: '{{ .grains.aws-route-table.outputs.route_table_id }}'
-  #       - destination_cidr_block: 0.0.0.0/0
-  #       - gateway_id: '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
-  #       - excution_host: '{{ .inputs.execution_host }}'
+  aws-rt-routes:
+    kind: blueprint
+    depends-on: aws-internet-gateway, aws-route-table
+    spec: 
+      source:
+        store: torque-bps
+        path: blueprints/AWS_RT_Routes
+      host:
+        name: '{{ .inputs.execution_host }}'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - route_table_id: '{{ .grains.aws-route-table.outputs.route_table_id }}'
+        - destination_cidr_block: 0.0.0.0/0
+        - gateway_id: '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
+        - excution_host: '{{ .inputs.execution_host }}'
