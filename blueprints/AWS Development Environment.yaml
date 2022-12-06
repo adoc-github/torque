@@ -181,13 +181,13 @@ grains:
       inputs:
       - name: '{{ .inputs.route_table_name }}'
       - region: '{{ .inputs.region }}'
-      - route_table_routes: >-
-          [
-            {
-              "cidr_block": "0.0.0.0/0",
-              "gateway_id": {{ .grains.aws-internet-gateway.outputs.igw_id }}
-            }
-          ]
+      # - route_table_routes: >-
+      #     [
+      #       {
+      #         "cidr_block": "0.0.0.0/0",
+      #         "gateway_id": {{ .grains.aws-internet-gateway.outputs.igw_id }}
+      #       }
+      #     ]
       - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
       # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
       # env-vars:
