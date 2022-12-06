@@ -70,8 +70,6 @@ outputs:
     value: '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
   route_table_id:
     value: '{{ .grains.aws-route-table.outputs.route_table_id }}'
-  route_id:
-    value: '{{ .grains.AWS_RT_Routes.outputs.route_id }}'
   security_group_id:
     value: '{{ .grains.aws-security-group.outputs.security_group_id }}'
   instance_id:
@@ -293,12 +291,9 @@ grains:
         path: blueprints
       host:
         name: '{{ .inputs.execution_host }}'
-        service-account: torque-service-account
       inputs:
         - region: '{{ .inputs.region }}'
         - route_table_id: '{{ .grains.aws-route-table.outputs.route_table_id }}'
         - destination_cidr_block: 0.0.0.0/0
         - gateway_id: '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
         - excution_host: '{{ .inputs.execution_host }}'
-      outputs:
-      - route_id
