@@ -13,10 +13,10 @@ provider "aws" {
 
 resource "aws_instance" "testEC2" {
     ami = var.ami
-    # instance_type = var.instance_type
-    instance_type = "t2.micro"
-    subnet_id = "subnet-0124294163b6e76e0"
+    instance_type = var.instance_type
+    # instance_type = "t2.micro"
+    subnet_id = var.subnet_id
     tags = {
-        Name = "testEC2"
+        Name = var.name
     }
 }

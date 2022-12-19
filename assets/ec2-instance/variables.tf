@@ -15,6 +15,18 @@ variable "instance_type" {
   # }
 }
 
+variable "subnet_id" {
+  description = "Subnet ID"
+  default = "subnet-00000000000000000"
+  type = string
+}
+
+variable "name" {
+  description = "Instance name"
+  default = "test"
+  type = string
+}
+
 variable "region" {
     description = "Region where to create resources" 
     type = string
