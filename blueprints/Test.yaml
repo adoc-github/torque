@@ -1,0 +1,38 @@
+spec_version: 2
+description: ADOC original blueprint.
+
+# blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
+inputs:
+  region:
+    type: string
+    default: ap-northeast-1
+  route_table_id:
+    type: string
+    default: rtb-00000000000000000
+  gateway_id:
+    type: string
+  execution_host:
+    type: execution-host
+
+# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
+outputs:
+  instance_public_dns:
+    value: '{{ .grains.AWS_RT_Routes.outputs.route_id }}'
+
+grains:
+  AWS_RT_Routes:
+    kind: blueprint
+    spec: 
+      source:
+        store: torque-bps
+        path: blueprints
+      host:
+        name: '{{ .inputs.execution_host }}'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - route_table_id: '{{ .inputs.route_table_id }}'
+        - destination_cidr_block: '0.0.0.0/0'
+        - gateway_id: '{{ .inputs.gateway_id }}'
+        - execution_host: '{{ .inputs.execution_host }}'
+      outputs:
+        - route_id
