@@ -37,7 +37,8 @@ grains:
         # service-account: <service-account-name>
       inputs:
       - route_table_id: '{{ .inputs.route_table_id }}'
-      - destination_cidr_block: '{{ .inputs.destination_cidr_block }}'
+      # - destination_cidr_block: '{{ .inputs.destination_cidr_block }}'
+      - destination_cidr_block: '0.0.0.0/0'
       - gateway_id: '{{ .inputs.gateway_id }}'
       - region: '{{ .inputs.region }}'
       # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
