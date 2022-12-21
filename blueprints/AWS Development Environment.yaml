@@ -267,7 +267,7 @@ grains:
       - name: '{{ .inputs.instance_name }}'
       - region: '{{ .inputs.region }}'
       - subnet_id: '{{ .grains.aws-subnet.outputs.subnet_id }}'
-      - vpc_security_group_ids: "[{{ .grains.aws-security-group.outputs.security_group_id }}]"
+      - vpc_security_group_ids: '["{{ .grains.aws-security-group.outputs.security_group_id }}"]'
       # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
       # env-vars:
       # - VAR_NAME: var value
