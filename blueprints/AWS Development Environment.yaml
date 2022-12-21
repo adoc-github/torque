@@ -167,7 +167,7 @@ grains:
 
   aws-route-table:
     kind: terraform
-    depends-on: aws-vpc, aws-internet-gateway
+    depends-on: aws-vpc
     spec:
       source:
         store: torque-bps
