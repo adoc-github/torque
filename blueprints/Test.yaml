@@ -34,8 +34,8 @@ grains:
       inputs:
         - region: '{{ .inputs.region }}'
         - route_table_id: '{{ .inputs.route_table_id }}'
-        # - destination_cidr_block: "0.0.0.0/0"
-        - destination_cidr_block: '{{ .inputs.destination_cidr_block }}'
+        - destination_cidr_block: '{"0.0.0.0/0"}'
+        # - destination_cidr_block: '{{ .inputs.destination_cidr_block }}'
         - gateway_id: '{{ .inputs.gateway_id }}'
         - execution_host: '{{ .inputs.execution_host }}'
       outputs:
