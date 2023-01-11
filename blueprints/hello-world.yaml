@@ -39,6 +39,8 @@ grains:
       - ARM_SUBSCRIPTION_ID: 82b164d2-7691-4f9b-9848-ee5bb32790c7
       - ARM_TENANT_ID: 813267ad-a143-44ac-b8e0-76565973acbf
       - ARM_CLIENT_ID: 707daa45-822c-474e-b837-2f8dabd2b47f
+      authentication:
+        - adoc-aws-user
       outputs:
       - message
       - url
