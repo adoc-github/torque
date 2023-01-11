@@ -14,6 +14,20 @@ outputs:
   url:
     value: '{{ .grains.hello-world.outputs.url }}'
 grains:
+  hello-world-a:
+    kind: blueprint
+    spec: 
+      source:
+        store: torque-bps
+        path: blueprints
+      host:
+        name: '{{ .inputs.host_name }}'
+      inputs:
+        - my_name: 'Yuki Yamamoto'
+        - host_name: '{{ .inputs.host_name }}'
+      outputs:
+        - message
+        - url
   hello-world:
     kind: terraform
     spec:
