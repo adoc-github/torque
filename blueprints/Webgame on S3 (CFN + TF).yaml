@@ -47,7 +47,8 @@ grains:
       - BucketName
       region: '{{ .inputs.region }}'
       authentication:
-      - torque_admin
+        role-arn: arn:aws:iam::{{ .params.aws_account_id}}:role/{{ .params.aws_role_name }}
+        external-id: '{{ .params.aws_torque_external_id }}'
   s3-deploy-webapp:
     kind: terraform
     depends-on: AWSS3Bucket
