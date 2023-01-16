@@ -34,6 +34,8 @@ grains:
       source:
         store: eks-terraform
         path: assets/cloudformations/AWSS3Bucket.yaml
+      authentication:
+        - adoc-aws-user
       inputs:
       - AccessControl: '{{ .inputs.access_control }}'
       - BucketName: '{{ .inputs.BucketName }}-{{ sandboxid | downcase }}'
@@ -46,9 +48,6 @@ grains:
       - DomainName
       - BucketName
       region: '{{ .inputs.region }}'
-      authentication:
-        role-arn: arn:aws:iam::{{ .params.aws_account_id}}:role/{{ .params.aws_role_name }}
-        external-id: '{{ .params.aws_torque_external_id }}'
   s3-deploy-webapp:
     kind: terraform
     depends-on: AWSS3Bucket
