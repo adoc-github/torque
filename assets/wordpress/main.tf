@@ -36,7 +36,7 @@ resource "aws_instance" "example" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/install_wordpress_nginx.sh",
-      "sed -i 's/<RDS_ENDPOINT>/${aws_rds_instance.example.endpoint}/g' /tmp/install_wordpress_nginx.sh",
+      "sed -i 's/<RDS_ENDPOINT>/${var.rds_endpoint}/g' /tmp/install_wordpress_nginx.sh",
       "/tmp/install_wordpress_nginx.sh"
     ]
   }
@@ -54,3 +54,10 @@ resource "aws_rds_instance" "example" {
   subnet_ids = [aws_subnet.example.id]
 }
 
+output "rds_endpoint" {
+  value = aws_rds_instance.example.endpoint
+}
+
+variable "rds_endpoint" {
+  default = "${aws_rds_instance.example.endpoint}"
+}
