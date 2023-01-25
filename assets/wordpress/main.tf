@@ -53,11 +53,3 @@ resource "aws_rds_instance" "example" {
   vpc_security_group_ids = [aws_security_group.example.id]
   subnet_ids = [aws_subnet.example.id]
 }
-
-output "rds_endpoint" {
-  value = aws_rds_instance.example.endpoint
-}
-
-variable "rds_endpoint" {
-  default = "${aws_rds_instance.example.endpoint}"
-}
