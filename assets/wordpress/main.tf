@@ -1,5 +1,6 @@
 provider "aws" {
   region = "ap-northeast-1"
+  version = "~> 3.0"
 }
 
 resource "aws_vpc" "example" {
