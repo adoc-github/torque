@@ -1,3 +1,4 @@
-variable "rds_endpoint" {
-  default = "${aws_rds_instance.example.endpoint}"
+variable "region" {
+  default = "ap-northeast-1"
+  type    = string
 }

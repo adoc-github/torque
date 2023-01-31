@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "ap-northeast-1"
+  region = var.region
   version = "~> 3.0"
 }
 
@@ -37,7 +37,7 @@ resource "aws_instance" "example" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/install_wordpress_nginx.sh",
-      "sed -i 's/<RDS_ENDPOINT>/${var.rds_endpoint}/g' /tmp/install_wordpress_nginx.sh",
+      "sed -i 's/<RDS_ENDPOINT>/${local.rds_endpoint}/g' /tmp/install_wordpress_nginx.sh",
       "/tmp/install_wordpress_nginx.sh"
     ]
   }
@@ -53,4 +53,8 @@ resource "aws_rds_instance" "example" {
   password = "mypassword"
   vpc_security_group_ids = [aws_security_group.example.id]
   subnet_ids = [aws_subnet.example.id]
+}
+
+locals {
+  rds_endpoint = aws_rds_instance.example.endpoint
 }
