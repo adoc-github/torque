@@ -43,7 +43,7 @@ resource "aws_instance" "example" {
   }
 }
 
-resource "aws_rds_instance" "example" {
+resource "aws_db_instance" "example" {
   engine = "mariadb"
   instance_class = "db.t2.micro"
   allocated_storage = 10
