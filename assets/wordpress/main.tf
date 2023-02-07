@@ -2,11 +2,6 @@ provider "aws" {
   region = "ap-northeast-1"
 }
 
-resource "aws_key_pair" "example" {
-  key_name   = "example"
-  public_key = file("~/.ssh/id_rsa.pub")
-}
-
 resource "aws_vpc" "example" {
   cidr_block = "10.0.0.0/24"
 }
@@ -20,7 +15,7 @@ resource "aws_instance" "example" {
   ami = "ami-0cd7ad8676931d727"
   instance_type = "t2.micro"
   subnet_id = aws_subnet.example.id
-  key_name = aws_key_pair.example.key_name
+  key_name = "testadoc"
 
   provisioner "remote-exec" {
     inline = [
