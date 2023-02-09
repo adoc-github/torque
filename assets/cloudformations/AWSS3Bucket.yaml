@@ -7,19 +7,19 @@ Parameters:
     Type: String
     Default: my-bucket
     Description: Logical Bucket Name
-Outputs:
-  Arn:
-    Description: The Bucket Arn
-    Value: !GetAtt 
-      - MyBucket
-      - Arn
-  DomainName:
-    Description: The Bucket Domain Name
-    Value: !GetAtt 
-      - MyBucket
-      - DomainName
-  BucketName:
-    Value: !Ref MyBucket
+# Outputs:
+#   Arn:
+#     Description: The Bucket Arn
+#     Value: !GetAtt 
+#       - MyBucket
+#       - Arn
+#   DomainName:
+#     Description: The Bucket Domain Name
+#     Value: !GetAtt 
+#       - MyBucket
+#       - DomainName
+#   BucketName:
+#     Value: !Ref MyBucket
 Description: Creates an S3 Bucket
 Resources:
   MyBucket:
