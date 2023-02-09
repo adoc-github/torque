@@ -14,6 +14,7 @@ resource "aws_instance" "web" {
 
   network_interface {
     network_interface_id = aws_network_interface.ens192.id
+    device_index = 0
   }
 
   user_data = <<-EOF
