@@ -1,29 +1,37 @@
 provider "aws" {
-  region = "us-west-2"
+  region = "ap-northeast-1"
 }
 
 resource "aws_instance" "web" {
-  ami           = "ami-0c55b159cbfafe1f0"
+  ami = "ami-0c55b159cbfafe1f0"
   instance_type = "t2.micro"
+  key_name = "testadoc"
+
+  root_block_device {
+    volume_size = 32
+    volume_type = "gp2"
+  }
 
   network_interface {
     network_interface_id = aws_network_interface.ens192.id
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo yum install -y httpd",
-      "sudo systemctl start httpd",
-      "sudo systemctl enable httpd"
-    ]
-  }
+  user_data = <<-EOF
+    #!/bin/bash
+    sudo yum install -y httpd
+    sudo systemctl start httpd
+    sudo systemctl enable httpd
+  EOF
 }
 
 resource "aws_network_interface" "ens192" {
   subnet_id = aws_subnet.public.id
 
   private_ips = ["10.0.1.100"]
-  associate_public_ip_address = true
+  ipv4_association {
+    associate_public_ip_address = true
+    ipv4_address = "10.0.1.100"
+  }
 }
 
 resource "aws_subnet" "public" {
