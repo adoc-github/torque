@@ -41,7 +41,9 @@ Resources:
       ImageId: ami-0cd7ad8676931d727
       KeyName: testadoc
       NetworkInterfaces:
-        - SubnetId: !Ref Subnet
+        - AssociatePublicIpAddress: true
+          DeviceIndex: 0
+          SubnetId: !Ref Subnet
           GroupSet:
             - !Ref SecurityGroup
       UserData:
