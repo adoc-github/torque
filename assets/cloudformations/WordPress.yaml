@@ -23,6 +23,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: example
+      GroupDescription: example security group
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
