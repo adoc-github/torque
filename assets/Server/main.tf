@@ -28,10 +28,7 @@ resource "aws_network_interface" "ens192" {
   subnet_id = aws_subnet.public.id
 
   private_ips = ["10.0.1.100"]
-  ipv4_association {
-    associate_public_ip_address = true
-    ipv4_address = "10.0.1.100"
-  }
+  private_ip_address = "10.0.1.100"
 }
 
 resource "aws_subnet" "public" {
