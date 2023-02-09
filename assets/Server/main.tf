@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "web" {
-  ami = "ami-0c55b159cbfafe1f0"
+  ami = "ami-3185744e"
   instance_type = "t2.micro"
   key_name = "testadoc"
 
