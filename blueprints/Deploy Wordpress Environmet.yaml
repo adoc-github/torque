@@ -1,0 +1,253 @@
+spec_version: 2
+description: ADOC original blueprint.
+
+# blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
+inputs:
+  region:
+    type: string
+    default: ap-northeast-1
+  vpc_name:
+    type: string
+    default: terraform_vpc
+  vpc_cidr:
+    type: string
+    default: 10.0.0.0/24
+  subnet_name:
+    type: string
+    default: terraform_subnet
+  subnet_cidr:
+    type: string
+    default: '["10.0.0.0/28"]'
+  internet_gateway_name:
+    type: string
+    default: terraform_igw
+  route_table_name:
+    type: string
+    default: terraform_rt
+  security_group_name:
+    type: string
+    default: terraform_sg
+  sg_rule_type:
+    type: string
+    default: ingress
+  sg_rule_protocol:
+    type: string
+    default: tcp
+  sg_rule_from_port:
+    type: string
+    default: 22
+  sg_rule_to_port:
+    type: string
+    default: 22
+  sg_rule_cidr_blocks:
+    type: string
+    default: '["0.0.0.0/0"]'
+  instance_ami:
+    type: string
+    default: ami-3185744e
+  instance_associate_public_ip_address:
+    type: string
+    default: false
+  instance_type:
+    type: string
+    default: t2.micro
+  instance_key_name:
+    type: string
+    default: testadoc
+  instance_name:
+    type: string
+    default: terraform_instance
+  execution_host:
+    type: execution-host
+
+# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
+outputs:
+  vpc_id:
+    value: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+  subnet_id:
+    value: '{{ .grains.aws-subnet.outputs.subnet_id }}'
+  internet_gateway_id:
+    value: '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
+  route_table_id:
+    value: '{{ .grains.aws-route-table.outputs.route_table_id }}'
+  security_group_id:
+    value: '{{ .grains.aws-security-group.outputs.security_group_id }}'
+  instance_id:
+    value: '{{ .grains.aws-instance.outputs.id }}'
+  instance_password_data:
+    value: '{{ .grains.aws-instance.outputs.password_data }}'
+  instance_private_dns:
+    value: '{{ .grains.aws-instance.outputs.private_dns }}'
+  instance_private_ip:
+    value: '{{ .grains.aws-instance.outputs.private_ip }}'
+  instance_public_dns:
+    value: '{{ .grains.aws-instance.outputs.public_dns }}'
+  instance_public_ip:
+    value: '{{ .grains.aws-instance.outputs.public_ip }}'
+
+grains:
+  aws-vpc:
+    kind: terraform
+    spec:
+      source:
+        store: eks-terraform
+        path: assets/aws-vpc
+      host:
+        name: '{{ .inputs.execution_host }}'
+      inputs:
+      - cidr: '{{ .inputs.vpc_cidr }}'
+      - name: '{{ .inputs.vpc_name }}'
+      - region: '{{ .inputs.region }}'
+      env-vars: []
+      outputs:
+      - vpc_id
+    tf-version: 1.3.4
+
+  aws-internet-gateway:
+    kind: terraform
+    depends-on: aws-vpc
+    spec:
+      source:
+        store: torque-bps
+        path: assets/aws-internet-gateway
+      host:
+        name: '{{ .inputs.execution_host }}'
+      inputs:
+      - name: '{{ .inputs.internet_gateway_name }}'
+      - region: '{{ .inputs.region }}'
+      - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+      env-vars: []
+      outputs:
+      - igw_id
+    tf-version: 1.3.5
+
+  aws-subnet:
+    kind: terraform
+    depends-on: aws-vpc
+    spec:
+      source:
+        store: eks-terraform
+        path: assets/aws-subnet
+      host:
+        name: '{{ .inputs.execution_host }}'
+      inputs:
+      - name: '{{ .inputs.subnet_name }}'
+      - region: '{{ .inputs.region }}'
+      - subnets: '{{ .inputs.subnet_cidr }}'
+      - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+      - azs: '["ap-northeast-1a"]'
+      env-vars: []
+      outputs:
+      - subnet_id
+    tf-version: 1.3.4
+
+  aws-route-table:
+    kind: terraform
+    depends-on: aws-vpc
+    spec:
+      source:
+        store: torque-bps
+        path: assets/aws-route-table
+      host:
+        name: '{{ .inputs.execution_host }}'
+      inputs:
+      - name: '{{ .inputs.route_table_name }}'
+      - region: '{{ .inputs.region }}'
+      - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+      env-vars: []
+      outputs:
+      - route_table_id
+    tf-version: 1.3.5
+
+  aws-security-group:
+    kind: terraform
+    depends-on: aws-vpc
+    spec:
+      source:
+        store: torque-bps
+        path: assets/aws-security-group
+      host:
+      # Execution Host - the platform where the asset executable will run.
+      # For example, a Kubernetes cluster can be used as an execution host.
+        name: '{{ .inputs.execution_host }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - name: '{{ .inputs.security_group_name }}'
+      - region: '{{ .inputs.region }}'
+      - vpc_id: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - security_group_id
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.3.6
+
+  aws-security-group-rule:
+    kind: terraform
+    depends-on: aws-security-group
+    spec:
+      source:
+        store: torque-bps
+        path: assets/aws-security-group-rule
+      host:
+        name: '{{ .inputs.execution_host }}'
+      inputs:
+      - region: '{{ .inputs.region }}'
+      - security_group_id: '{{ .grains.aws-security-group.outputs.security_group_id }}'
+      - type: '{{ .inputs.sg_rule_type }}'
+      - protocol: '{{ .inputs.sg_rule_protocol }}'
+      - from_port: '{{ .inputs.sg_rule_from_port }}'
+      - to_port: '{{ .inputs.sg_rule_to_port }}'
+      - cidr_blocks: '{{ .inputs.sg_rule_cidr_blocks }}'
+      env-vars: []
+      outputs: []
+    tf-version: 1.3.6
+
+  aws-instance:
+    kind: terraform
+    depends-on: aws-subnet, aws-security-group
+    spec:
+      source:
+        store: eks-terraform
+        path: assets/aws-instance
+      host:
+        name: '{{ .inputs.execution_host }}'
+      inputs:
+      - ami: '{{ .inputs.instance_ami }}'
+      - associate_public_ip_address: '{{ .inputs.instance_associate_public_ip_address }}'
+      - instance_type: '{{ .inputs.instance_type }}'
+      - key_name: '{{ .inputs.instance_key_name }}'
+      - name: '{{ .inputs.instance_name }}'
+      - region: '{{ .inputs.region }}'
+      - subnet_id: '{{ .grains.aws-subnet.outputs.subnet_id }}'
+      - vpc_security_group_ids: '["{{ .grains.aws-security-group.outputs.security_group_id }}"]'
+      env-vars: []
+      outputs:
+      - id
+      - password_data
+      - private_dns
+      - private_ip
+      - public_dns
+      - public_ip
+    tf-version: 1.3.5
+
+  AWS_RT_Routes:
+    kind: blueprint
+    depends-on: aws-internet-gateway, aws-route-table
+    spec: 
+      source:
+        store: torque-bps
+        path: blueprints
+      host:
+        name: '{{ .inputs.execution_host }}'
+      inputs:
+        - region: '{{ .inputs.region }}'
+        - route_table_id: '{{ .grains.aws-route-table.outputs.route_table_id }}'
+        - destination_cidr_block: '0.0.0.0/0'
+        - gateway_id: '{{ .grains.aws-internet-gateway.outputs.igw_id }}'
+        - execution_host: '{{ .inputs.execution_host }}'
+      outputs:
+        - route_id
