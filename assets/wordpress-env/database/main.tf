@@ -60,7 +60,7 @@ resource "aws_db_instance" "example_db_instance" {
   db_name                 = "${var.db_name}"
   identifier            = "example-db-instance"
   engine                = "mariadb"
-  engine_version        = "10.4.13"
+  engine_version        = "10.6.10"
   instance_class        = "db.t2.micro"
   allocated_storage     = 20
   storage_type          = "gp2"
