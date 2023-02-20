@@ -12,23 +12,39 @@ description: ADOC original blueprint.
 #     value: '{{ .grains.aws-vpc.outputs.vpc_id }}'
 
 grains:
-  robotShopMicroservices:
-    kind: helm
-    # depends-on: mySqlDB, s3Bucket
+  database:
+    kind: terraform
     spec:
       source:
         store: eks-terraform
-        path: assets/helm-chat-templates/wordpress-chart
+        path: assets/wordpress-env/database
       host:
         name: adoc-eks
-        service-account: adoc-sa
-      # commands:
-      #   - "dep up xxx"
-      # scripts:
-      #   post-helm-install:
-      #     source:
-      #       store: eks-terraform
-      #       path:  assets/shell-scripts/get-robot-web-address.sh
-      #     outputs:
-      #       - frontend
-      # inputs:
+        service-account: torque-service-account
+      inputs:
+        - db_name: example_db
+        - username: adminuser
+        - region: ap-northeast-1
+      outputs:
+        - hostname
+        - connection_string
+  # wordpress:
+  #   kind: helm
+  #   # depends-on: mySqlDB, s3Bucket
+  #   spec:
+  #     source:
+  #       store: eks-terraform
+  #       path: assets/wordpress-env/wordpress
+  #     host:
+  #       name: adoc-eks
+  #       service-account: adoc-sa
+  #     # commands:
+  #     #   - "dep up xxx"
+  #     # scripts:
+  #     #   post-helm-install:
+  #     #     source:
+  #     #       store: eks-terraform
+  #     #       path:  assets/shell-scripts/get-robot-web-address.sh
+  #     #     outputs:
+  #     #       - frontend
+  #     # inputs:
