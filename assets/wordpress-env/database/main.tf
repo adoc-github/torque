@@ -11,11 +11,6 @@ provider "aws" {
   region = var.region
 }
 
-
-provider "aws" {
-  region = "ap-northeast-1"
-}
-
 # VPC
 resource "aws_vpc" "example_vpc" {
   cidr_block = "10.0.0.0/16"
@@ -49,6 +44,7 @@ resource "aws_security_group" "example_security_group" {
 
 # RDSインスタンス
 resource "aws_db_instance" "example_db_instance" {
+  db_name                 = "${var.db_name}"
   identifier            = "example-db-instance"
   engine                = "mariadb"
   engine_version        = "10.4.13"
@@ -60,18 +56,8 @@ resource "aws_db_instance" "example_db_instance" {
   vpc_security_group_ids = [aws_security_group.example_security_group.id]
 
   # パスワードの設定
-  master_username = "example_user"
-  master_password = "example_password"
-
-  # バックアップの設定
-  backup_retention_period = 7
-  preferred_backup_window = "03:00-04:00"
-
-  # 監視の設定
-  monitoring_interval    = 60
-  monitoring_role_arn    = aws_iam_role.example_iam_role.arn
-  enable_performance_insights = true
-  performance_insights_retention_period = 7
+  username             = "${var.username}"
+  password             = "${random_password.password.result}"
 }
 
 # RDSインスタンスのサブネットグループ
