@@ -11,6 +11,12 @@ provider "aws" {
   region = var.region
 }
 
+resource "random_password" "password" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
 # VPC
 resource "aws_vpc" "example_vpc" {
   cidr_block = "10.0.0.0/16"
