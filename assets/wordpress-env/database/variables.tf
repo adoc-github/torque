@@ -1,7 +1,3 @@
-variable "sandbox_id" {
-  description = "unique id"
-}
-
 variable "db_name" {
   description = "db name"
 }
