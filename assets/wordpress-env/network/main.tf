@@ -38,6 +38,7 @@ resource "aws_subnet" "wordpress_subnet" {
   vpc_id     = aws_vpc.webapp_vpc.id
   cidr_block = "10.0.3.0/24"
   availability_zone = "${var.region}d"
+  map_public_ip_on_launch = true
 }
 
 # セキュリティグループ
