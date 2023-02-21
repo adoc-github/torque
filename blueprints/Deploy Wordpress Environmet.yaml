@@ -4,10 +4,13 @@ description: ADOC original blueprint.
 inputs:
   db_name:
     type: string
+    default: wordpress
   db_password:
     type: string
+    sensitive: true
   db_username:
     type: string
+    default: root
   region:
     type: string
     default: ap-northeast-1
