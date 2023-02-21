@@ -1,11 +1,3 @@
-output "subnet_ids" {
-  value = [
-    aws_subnet.rds_subnet_1.id,
-    aws_subnet.rds_subnet_2.id,
-    aws_subnet.rds_subnet_3.id
-  ]
-}
-
 output "rds_subnet_1_id" {
   value = aws_subnet.rds_subnet_1.id
 }
