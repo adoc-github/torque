@@ -20,7 +20,10 @@ resource "aws_instance" "example" {
   key_name      = "testadoc"
   user_data     = <<-EOF
                   #!/bin/bash
-                  yum install -y httpd php php-mysqlnd wget
+                  yum install -y httpd wget
+                  yum -y install epel-release
+                  yum -y install http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+                  yum -y install --disablerepo=* --enablerepo=epel,remi,remi-safe,remi-php74 php php-mysqlnd
                   systemctl enable httpd
                   systemctl start httpd
                   cd /var/www/html
