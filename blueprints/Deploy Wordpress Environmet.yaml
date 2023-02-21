@@ -53,8 +53,8 @@ grains:
         - torque-agent
       inputs:
       - DBName: '{{ .inputs.db_name }}'
-      - DBUsername: '{{ .inputs.db_password }}'
-      - DBPassword: '{{ .inputs.db_username }}'
+      - DBUsername: '{{ .inputs.db_username }}'
+      - DBPassword: '{{ .inputs.db_password }}'
       - Subnet1Id: '{{ .grains.network.outputs.rds_subnet_1_id }}'
       - Subnet2Id: '{{ .grains.network.outputs.rds_subnet_2_id }}'
       - SecurityGroupId: '{{ .grains.network.outputs.rds_security_group_id }}'
