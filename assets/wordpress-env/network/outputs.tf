@@ -1,7 +1,27 @@
-output "hostname" {
-  value = "${aws_db_instance.example_db_instance.endpoint}"
+output "subnet_ids" {
+  value = [
+    aws_subnet.rds_subnet_1.id,
+    aws_subnet.rds_subnet_2.id,
+    aws_subnet.rds_subnet_3.id
+  ]
 }
-output "connection_string" {
-  sensitive = true
-  value = "Server=${aws_db_instance.example_db_instance.address};Port=${aws_db_instance.example_db_instance.port};Database=${var.db_name};Uid=${var.username};Pwd=${var.password};"
+
+output "rds_subnet_1_id" {
+  value = aws_subnet.rds_subnet_1.id
+}
+
+output "rds_subnet_2_id" {
+  value = aws_subnet.rds_subnet_2.id
+}
+
+output "wordpress_subnet_id" {
+  value = aws_subnet.wordpress_subnet.id
+}
+
+output "rds_security_group_id" {
+  value = aws_security_group.rds_security_group.id
+}
+
+output "wordpress_security_group_id" {
+  value = aws_security_group.wordpress_security_group.id
 }

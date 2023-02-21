@@ -12,27 +12,38 @@ provider "aws" {
 }
 
 # VPC
-resource "aws_vpc" "example_vpc" {
+resource "aws_vpc" "webapp_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
+# インターネットゲートウェイ
+resource "aws_internet_gateway" "example" {
+  vpc_id = aws_vpc.webapp_vpc.id
+}
+
 # サブネット
-resource "aws_subnet" "example_subnet_1" {
-  vpc_id     = aws_vpc.example_vpc.id
+resource "aws_subnet" "rds_subnet_1" {
+  vpc_id     = aws_vpc.webapp_vpc.id
   cidr_block = "10.0.1.0/24"
   availability_zone = "${var.region}a"
 }
 
-resource "aws_subnet" "example_subnet_2" {
-  vpc_id     = aws_vpc.example_vpc.id
+resource "aws_subnet" "rds_subnet_2" {
+  vpc_id     = aws_vpc.webapp_vpc.id
   cidr_block = "10.0.2.0/24"
   availability_zone = "${var.region}c"
 }
 
+resource "aws_subnet" "wordpress_subnet" {
+  vpc_id     = aws_vpc.webapp_vpc.id
+  cidr_block = "10.0.3.0/24"
+  availability_zone = "${var.region}d"
+}
+
 # セキュリティグループ
-resource "aws_security_group" "example_security_group" {
-  name_prefix = "example"
-  vpc_id      = aws_vpc.example_vpc.id
+resource "aws_security_group" "rds_security_group" {
+  name_prefix = "rds"
+  vpc_id      = aws_vpc.webapp_vpc.id
 
   ingress {
     from_port   = 3306
@@ -49,28 +60,36 @@ resource "aws_security_group" "example_security_group" {
   }
 }
 
-# RDSインスタンス
-resource "aws_db_instance" "example_db_instance" {
-  db_name                 = "${var.db_name}"
-  identifier              = "example-db-instance"
-  engine                  = "mariadb"
-  engine_version          = "10.6.10"
-  instance_class          = "db.t2.micro"
-  allocated_storage       = 20
-  storage_type            = "gp2"
-  publicly_accessible     = false
-  skip_final_snapshot     = true
-  db_subnet_group_name    = aws_db_subnet_group.example_db_subnet_group.name
-  vpc_security_group_ids  = [aws_security_group.example_security_group.id]
-  multi_az                = true
+resource "aws_security_group" "wordpress_security_group" {
+  name_prefix = "wordpress"
+  vpc_id      = aws_vpc.webapp_vpc.id
 
-  # パスワードの設定
-  username             = "${var.username}"
-  password             = "${var.password}"
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
-# RDSインスタンスのサブネットグループ
-resource "aws_db_subnet_group" "example_db_subnet_group" {
-  name       = "example-db-subnet-group"
-  subnet_ids = [aws_subnet.example_subnet_1.id, aws_subnet.example_subnet_2.id]
+# ルーティング
+resource "aws_route_table" "example" {
+  vpc_id = aws_vpc.webapp_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.example.id
+  }
+}
+
+resource "aws_route_table_association" "wordpress_association" {
+  subnet_id       = aws_subnet.wordpress_subnet.id
+  route_table_id  = aws_route_table.example.id
 }

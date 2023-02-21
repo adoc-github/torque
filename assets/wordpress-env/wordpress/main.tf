@@ -1,3 +1,4 @@
+# Providerを設定
 terraform {
   required_providers {
     aws = {
@@ -11,66 +12,27 @@ provider "aws" {
   region = var.region
 }
 
-# VPC
-resource "aws_vpc" "example_vpc" {
-  cidr_block = "10.0.0.0/16"
-}
+# インスタンス作成
+resource "aws_instance" "example" {
+  ami           = "ami-06a46da680048c8ae"
+  instance_type = "t2.micro"
+  subnet_id     = var.subnet_id
+  key_name      = "testadoc"
+  user_data     = <<-EOF
+                  #!/bin/bash
+                  yum install -y httpd php php-mysqlnd
+                  systemctl enable httpd
+                  systemctl start httpd
+                  cd /var/www/html
+                  wget https://wordpress.org/latest.tar.gz
+                  tar -xzvf latest.tar.gz --strip-components=1
+                  cp wp-config-sample.php wp-config.php
+                  sed -i 's/database_name_here/${var.db_name}/g' wp-config.php
+                  sed -i 's/username_here/${var.db_username}/g' wp-config.php
+                  sed -i 's/password_here/${var.db_password}/g' wp-config.php
+                  sed -i 's/localhost/${var.db_endpoint}/g' wp-config.php
+                  EOF
 
-# サブネット
-resource "aws_subnet" "example_subnet_1" {
-  vpc_id     = aws_vpc.example_vpc.id
-  cidr_block = "10.0.1.0/24"
-  availability_zone = "${var.region}a"
-}
-
-resource "aws_subnet" "example_subnet_2" {
-  vpc_id     = aws_vpc.example_vpc.id
-  cidr_block = "10.0.2.0/24"
-  availability_zone = "${var.region}c"
-}
-
-# セキュリティグループ
-resource "aws_security_group" "example_security_group" {
-  name_prefix = "example"
-  vpc_id      = aws_vpc.example_vpc.id
-
-  ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-# RDSインスタンス
-resource "aws_db_instance" "example_db_instance" {
-  db_name                 = "${var.db_name}"
-  identifier              = "example-db-instance"
-  engine                  = "mariadb"
-  engine_version          = "10.6.10"
-  instance_class          = "db.t2.micro"
-  allocated_storage       = 20
-  storage_type            = "gp2"
-  publicly_accessible     = false
-  skip_final_snapshot     = true
-  db_subnet_group_name    = aws_db_subnet_group.example_db_subnet_group.name
-  vpc_security_group_ids  = [aws_security_group.example_security_group.id]
-  multi_az                = true
-
-  # パスワードの設定
-  username             = "${var.username}"
-  password             = "${var.password}"
-}
-
-# RDSインスタンスのサブネットグループ
-resource "aws_db_subnet_group" "example_db_subnet_group" {
-  name       = "example-db-subnet-group"
-  subnet_ids = [aws_subnet.example_subnet_1.id, aws_subnet.example_subnet_2.id]
+  # インスタンスに割り当てるセキュリティグループIDを指定
+  vpc_security_group_ids = ["sg-0123456789abcdef0"]
 }
