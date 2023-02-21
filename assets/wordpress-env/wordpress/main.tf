@@ -20,7 +20,7 @@ resource "aws_instance" "example" {
   key_name      = "testadoc"
   user_data     = <<-EOF
                   #!/bin/bash
-                  yum install -y httpd php php-mysqlnd
+                  yum install -y httpd php php-mysqlnd wget
                   systemctl enable httpd
                   systemctl start httpd
                   cd /var/www/html
