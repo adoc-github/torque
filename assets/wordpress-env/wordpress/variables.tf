@@ -6,6 +6,12 @@ variable "region" {
 }
 
 variable "subnet_id" {
+  type = string
+  description = "Subnet ID"
+}
+
+variable "security_group_id" {
+  type = string
   description = "Subnet ID"
 }
 
