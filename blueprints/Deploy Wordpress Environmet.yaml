@@ -19,7 +19,7 @@ grains:
         store: eks-terraform
         path: assets/wordpress-env/database
       host:
-        name: adoc-eks
+        name: Quali
         service-account: torque-service-account
       inputs:
         - db_name: example_db
