@@ -6,6 +6,9 @@ description: ADOC original blueprint.
 #   execution_host:
 #     type: execution-host
 inputs:
+  db_username:
+    type: string
+    default: adminuser
   db_password:
     type: string
     sensitive: true
@@ -29,8 +32,8 @@ grains:
         - adoc-aws-user
       inputs:
         - db_name: example_db
-        - username: adminuser
-        - username: adminuser
+        - username: '{{ .inputs.db_username }}'
+        - password: '{{ .inputs.db_password }}'
         - region: ap-northeast-1
       outputs:
         - hostname
