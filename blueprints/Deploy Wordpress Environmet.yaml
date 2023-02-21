@@ -77,6 +77,7 @@ grains:
       inputs:
       - region: '{{ .inputs.region }}'
       - subnet_id: '{{ .grains.network.outputs.wordpress_subnet_id }}'
+      - security_group_id: '{{ .grains.network.outputs.wordpress_security_group_id }}'
       - db_endpoint: '{{ .grains.database.outputs.Endpoint }}'
       - db_name: '{{ .inputs.db_name }}'
       - db_username: '{{ .inputs.db_username }}'
