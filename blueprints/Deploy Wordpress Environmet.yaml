@@ -1,60 +1,84 @@
 spec_version: 2
 description: ADOC original blueprint.
 
-# blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
-# inputs:
-#   execution_host:
-#     type: execution-host
 inputs:
-  db_username:
+  db_name:
     type: string
-    default: adminuser
   db_password:
     type: string
-    sensitive: true
-    default: p1a2s3s4
+  db_username:
+    type: string
+  region:
+    type: string
+    default: ap-northeast-1
 
-# blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
-# outputs:
-#   vpc_id:
-#     value: '{{ .grains.aws-vpc.outputs.vpc_id }}'
+outputs:
+  wordpress_url:
+    value: '{{ .grains.wordpress.outputs.instance_url }}'
+    kind: link
 
 grains:
-  database:
+  network:
     kind: terraform
     spec:
       source:
         store: eks-terraform
-        path: assets/wordpress-env/database
-      host:
-        name: Quali
+        path: assets/wordpress-env/network
+      agent:
+        name: 'Quali'
       authentication:
-        - adoc-aws-user
+      - adoc-aws-user
       inputs:
-        - db_name: example_db
-        - username: '{{ .inputs.db_username }}'
-        - password: '{{ .inputs.db_password }}'
-        - region: ap-northeast-1
+      - region: '{{ .inputs.region }}'
+      env-vars: []
       outputs:
-        - hostname
-        - connection_string
-  # wordpress:
-  #   kind: helm
-  #   # depends-on: mySqlDB, s3Bucket
-  #   spec:
-  #     source:
-  #       store: eks-terraform
-  #       path: assets/wordpress-env/wordpress
-  #     host:
-  #       name: adoc-eks
-  #       service-account: adoc-sa
-  #     # commands:
-  #     #   - "dep up xxx"
-  #     # scripts:
-  #     #   post-helm-install:
-  #     #     source:
-  #     #       store: eks-terraform
-  #     #       path:  assets/shell-scripts/get-robot-web-address.sh
-  #     #     outputs:
-  #     #       - frontend
-  #     # inputs:
+      - rds_security_group_id
+      - rds_subnet_1_id
+      - rds_subnet_2_id
+      - wordpress_security_group_id
+      - wordpress_subnet_id
+    tf-version: 1.3.9
+
+  database:
+    kind: cloudformation
+    depends-on: network
+    spec:
+      source:
+        store: eks-terraform
+        path: assets/wordpress-env/database/database.yaml
+      authentication:
+        - torque-agent
+      inputs:
+      - DBName: '{{ .inputs.db_name }}'
+      - DBUsername: '{{ .inputs.db_password }}'
+      - DBPassword: '{{ .inputs.db_username }}'
+      - Subnet1Id: '{{ .grains.network.outputs.rds_subnet_1_id }}'
+      - Subnet2Id: '{{ .grains.network.outputs.rds_subnet_2_id }}'
+      - SecurityGroupId: '{{ .grains.network.outputs.rds_security_group_id }}'
+      env-vars: []
+      outputs:
+      - Endpoint
+      region: '{{ .inputs.region }}'
+
+  wordpress:
+    kind: terraform
+    depends-on: network, database
+    spec:
+      source:
+        store: eks-terraform
+        path: assets/wordpress-env/wordpress
+      agent:
+        name: 'Quali'
+      authentication:
+      - adoc-aws-user
+      inputs:
+      - region: '{{ .inputs.region }}'
+      - subnet_id: '{{ .grains.network.outputs.wordpress_subnet_id }}'
+      - db_endpoint: '{{ .grains.database.outputs.Endpoint }}'
+      - db_name: '{{ .inputs.db_name }}'
+      - db_username: '{{ .inputs.db_username }}'
+      - db_password: '{{ .inputs.db_password }}'
+      env-vars: []
+      outputs:
+      - instance_url
+    tf-version: 1.3.9
