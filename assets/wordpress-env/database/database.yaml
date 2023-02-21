@@ -5,6 +5,7 @@ Parameters:
     Type: String
   DBPassword: 
     Type: String
+    NoEcho: true
   Subnet1Id: 
     Type: String
   Subnet2Id: 
