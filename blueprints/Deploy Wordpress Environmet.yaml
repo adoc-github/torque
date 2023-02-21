@@ -20,7 +20,8 @@ grains:
         path: assets/wordpress-env/database
       host:
         name: Quali
-        service-account: torque-service-account
+      authentication:
+        - adoc-aws-user
       inputs:
         - db_name: example_db
         - username: adminuser
