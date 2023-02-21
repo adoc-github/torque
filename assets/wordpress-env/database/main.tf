@@ -11,12 +11,6 @@ provider "aws" {
   region = var.region
 }
 
-resource "random_password" "password" {
-  length           = 16
-  special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
-}
-
 # VPC
 resource "aws_vpc" "example_vpc" {
   cidr_block = "10.0.0.0/16"
@@ -71,7 +65,7 @@ resource "aws_db_instance" "example_db_instance" {
 
   # パスワードの設定
   username             = "${var.username}"
-  password             = "${random_password.password.result}"
+  password             = "${var.password}"
 }
 
 # RDSインスタンスのサブネットグループ
