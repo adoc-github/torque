@@ -5,6 +5,11 @@ description: ADOC original blueprint.
 # inputs:
 #   execution_host:
 #     type: execution-host
+inputs:
+  db_password:
+    type: string
+    sensitive: true
+    default: p1a2s3s4
 
 # blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
 # outputs:
@@ -24,6 +29,7 @@ grains:
         - adoc-aws-user
       inputs:
         - db_name: example_db
+        - username: adminuser
         - username: adminuser
         - region: ap-northeast-1
       outputs:
