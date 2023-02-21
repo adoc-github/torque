@@ -34,5 +34,5 @@ resource "aws_instance" "example" {
                   EOF
 
   # インスタンスに割り当てるセキュリティグループIDを指定
-  vpc_security_group_ids = ["sg-0123456789abcdef0"]
+  vpc_security_group_ids = [var.subnet_id]
 }
