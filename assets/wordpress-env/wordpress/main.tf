@@ -24,6 +24,7 @@ resource "aws_instance" "example" {
                   yum -y install epel-release
                   yum -y install http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
                   yum -y install --disablerepo=* --enablerepo=epel,remi,remi-safe,remi-php74 php php-mysqlnd
+                  setsebool -P httpd_can_network_connect 1
                   systemctl enable httpd
                   systemctl start httpd
                   cd /var/www/html
