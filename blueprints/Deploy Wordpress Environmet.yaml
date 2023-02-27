@@ -2,6 +2,9 @@ spec_version: 2
 description: ADOC original blueprint.
 
 inputs:
+  region:
+    type: string
+    default: ap-northeast-1
   db_name:
     type: string
     default: wordpress
@@ -11,9 +14,6 @@ inputs:
   db_username:
     type: string
     default: root
-  region:
-    type: string
-    default: ap-northeast-1
 
 outputs:
   wordpress_url:
