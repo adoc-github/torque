@@ -12,8 +12,28 @@ provider "aws" {
   region = var.region
 }
 
+# セキュリティグループ
+resource "aws_security_group" "wordpress_security_group" {
+  name_prefix = "wordpress"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 # インスタンス作成
-resource "aws_instance" "example" {
+resource "aws_instance" "wordpress_instance" {
   ami           = "ami-06a46da680048c8ae"
   instance_type = "t2.micro"
   subnet_id     = var.subnet_id
@@ -38,5 +58,5 @@ resource "aws_instance" "example" {
                   EOF
 
   # インスタンスに割り当てるセキュリティグループIDを指定
-  vpc_security_group_ids = [var.security_group_id]
+  vpc_security_group_ids = [aws_security_group.wordpress_security_group.id]
 }

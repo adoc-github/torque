@@ -5,12 +5,12 @@ variable "region" {
   description = "Region of WordPress"
 }
 
-variable "subnet_id" {
+variable "vpc_id" {
   type = string
-  description = "Subnet ID"
+  description = "VPC ID"
 }
 
-variable "security_group_id" {
+variable "subnet_id" {
   type = string
   description = "Subnet ID"
 }
