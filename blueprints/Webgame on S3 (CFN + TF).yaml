@@ -47,7 +47,7 @@ grains:
       - BucketName
       region: '{{ .inputs.region }}'
       authentication:
-      - adoc-aws-user
+      - torque-agent
   s3-deploy-webapp:
     kind: terraform
     depends-on: AWSS3Bucket
