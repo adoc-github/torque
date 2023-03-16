@@ -23,7 +23,7 @@ data "vsphere_datacenter" "dc" {
 
 # リソースプールの設定
 data "vsphere_resource_pool" "pool" {
-  name          = "192.168.90.206/Resources"
+  name          = "192.168.90.207/Resources"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -35,7 +35,7 @@ data "vsphere_network" "network" {
 
 # データストアの設定
 data "vsphere_datastore" "datastore" {
-  name          = "datastore3"
+  name          = "datastore2"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
