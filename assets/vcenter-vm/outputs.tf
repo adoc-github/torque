@@ -1,4 +1,4 @@
 
-output "testEC2_private_ip" {
-  value = data.vsphere_datacenter.datacenter.id
+output "resource_pool_id" {
+  value = data.vsphere_resource_pool.pool.id
 }
