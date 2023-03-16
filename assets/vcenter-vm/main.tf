@@ -61,8 +61,6 @@ resource "vsphere_virtual_machine" "example_vm" {
   disk {
     label            = "disk0"
     size             = 20
-    eagerly_scrub    = true
-    thin_provisioned = true
   }
 
   # ネットワークアダプターの設定
