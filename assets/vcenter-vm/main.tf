@@ -11,7 +11,7 @@ terraform {
 # vSphere Providerの設定
 provider "vsphere" {
   vsphere_server = var.vsphere_server
-  user_name      = var.user_name
+  user      = var.user_name
   password       = var.password
   allow_unverified_ssl = true
 }
