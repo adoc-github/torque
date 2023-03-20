@@ -54,7 +54,7 @@ resource "vsphere_virtual_machine" "example_vm" {
   scsi_type        = data.vsphere_virtual_machine.template.scsi_type
 
   # 仮想マシンの設定
-  num_cpus = 2
+  num_cpus = 3
   memory   = 2048
 
   # ディスクの設定
