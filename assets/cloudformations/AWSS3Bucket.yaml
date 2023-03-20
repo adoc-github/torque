@@ -30,3 +30,6 @@ Resources:
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: 404.html
+      Tags:
+        - Key: "CreateBy"
+          Value: "test1"
