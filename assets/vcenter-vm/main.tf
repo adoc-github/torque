@@ -55,7 +55,7 @@ resource "vsphere_virtual_machine" "example_vm" {
 
   # 仮想マシンの設定
   num_cpus = 2
-  memory   = 2048
+  memory   = 3072
 
   # ディスクの設定
   disk {
