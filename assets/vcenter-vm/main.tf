@@ -23,7 +23,7 @@ data "vsphere_datacenter" "dc" {
 
 # リソースプールの設定
 data "vsphere_resource_pool" "pool" {
-  name          = "192.168.90.207/Resources"
+  name          = "192.168.90.206/Resources"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -68,7 +68,7 @@ resource "vsphere_virtual_machine" "example_vm" {
     network_id = data.vsphere_network.network.id
   }
 
-  # テンプレートの設定
+  # テンプレートからクローン作成する設定
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
   }
