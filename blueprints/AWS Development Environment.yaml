@@ -241,8 +241,6 @@ grains:
       source:
         store: torque-bps
         path: blueprints
-      host:
-        name: '{{ .inputs.execution_host }}'
       inputs:
         - region: '{{ .inputs.region }}'
         - route_table_id: '{{ .grains.aws-route-table.outputs.route_table_id }}'
