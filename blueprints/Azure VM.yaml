@@ -1,39 +1,38 @@
 spec_version: 2
-description: Auto generated blueprint for terraform module hello-world
+description: Auto generated blueprint for terraform module azure-vm
 # blueprint inputs can be provided by the user, API or CI plugin when creating an environment from this blueprint.
 inputs:
-  my_name:
+  admin_username:
     type: string
-    default: John Doe
-  host_name:
-    type: execution-host
+    default: adminuser
+  admin_password:
+    type: string
+    sensitive: true
+  agent:
+    type: agent
 # blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
-outputs:
-  message:
-    value: '{{ .grains.hello-world.outputs.message }}'
-  url:
-    value: '{{ .grains.hello-world.outputs.url }}'
+outputs: {}
 grains:
-  hello-world:
+  azure-vm:
     kind: terraform
     spec:
       source:
-        store: torque-bps
-        path: assets/hello-world
-      host:
-      # Execution Host - the platform where the asset executable will run.
-      # For example, a Kubernetes cluster can be used as an execution host.
-        name: '{{ .inputs.host_name }}'
+        store: eks-terraform
+        path: assets/azure-vm
+      agent:
+      # The Torque agent that will be used to provision the environment.
+        name: '{{ .inputs.agent }}'
         # A service account annotated with a role ARN with permissions to run the asset
         # service-account: <service-account-name>
+      authentication:
+        - adoc-azure-user
       inputs:
-      - my_name: '{{ .inputs.my_name }}'
+        - admin_username: '{{ .inputs.admin_username }}'
+        - admin_password: '{{ .inputs.admin_password }}'
       # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
       # env-vars:
       # - VAR_NAME: var value
       env-vars: []
-      outputs:
-      - message
-      - url
+      outputs: []
     # The terraform version that will be used to deploy the module
-    tf-version: 1.3.6
+    tf-version: 1.4.2
