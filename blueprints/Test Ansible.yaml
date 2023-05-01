@@ -1,0 +1,23 @@
+spec_version: 2
+description: Testing ansible grain.
+inputs:
+  instance_ip:
+    type: string
+    default: adminuser
+outputs: {}
+grains:
+  install-apache:
+    kind: ansible
+    spec:
+      source:
+        store: iac-assets
+        path: ansible/install-apache.yml
+      agent:
+        name: adoc-vcenter
+      inventory-file:
+        all:
+          hosts:
+            '{{ .inputs.instance_ip }}':
+          vars:
+            ansible_user: username
+            ansible_ssh_private_key_file: /mnt/nas/aws_ssh_key/torque.pem
