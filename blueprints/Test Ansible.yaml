@@ -3,7 +3,7 @@ description: Testing ansible grain.
 inputs:
   instance_ip:
     type: string
-    default: adminuser
+    default: 0.0.0.0
 outputs: {}
 grains:
   install-apache:
