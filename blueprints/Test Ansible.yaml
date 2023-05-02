@@ -5,6 +5,7 @@ inputs:
     type: string
     default: 0.0.0.0
 outputs: {}
+grains:
   local-task:
     kind: ansible
     depends-on: validate
