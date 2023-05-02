@@ -8,7 +8,6 @@ outputs: {}
 grains:
   local-task:
     kind: ansible
-    depends-on: validate
     spec:
       source:
         store: iac-assets
