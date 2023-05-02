@@ -10,7 +10,7 @@ grains:
     kind: shell
     spec:
       agent:
-        name: adoc-vcenter
+        name: Quali
       activities:
         deploy:
           commands:
