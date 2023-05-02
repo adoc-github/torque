@@ -5,24 +5,13 @@ inputs:
     type: string
     default: 0.0.0.0
 outputs: {}
-grains:
-  validate:
-    kind: shell
-    spec:
-      agent:
-        name: Quali
-      activities:
-        deploy:
-          commands:
-            - "ls -la"
-
-  install-apache:
+  local-task:
     kind: ansible
     depends-on: validate
     spec:
       source:
         store: iac-assets
-        path: ansible/install-apache.yml
+        path: ansible/local-task.yml
       agent:
         name: adoc-vcenter
       inventory-file:
@@ -30,5 +19,21 @@ grains:
           hosts:
             '{{ .inputs.instance_ip }}':
           vars:
-            ansible_user: centos
-            ansible_ssh_private_key_file: /var/secrets/torque.pem
+            ansible_connection: local
+
+  # install-apache:
+  #   kind: ansible
+  #   depends-on: validate
+  #   spec:
+  #     source:
+  #       store: iac-assets
+  #       path: ansible/install-apache.yml
+  #     agent:
+  #       name: adoc-vcenter
+  #     inventory-file:
+  #       all:
+  #         hosts:
+  #           '{{ .inputs.instance_ip }}':
+  #         vars:
+  #           ansible_user: centos
+  #           ansible_ssh_private_key_file: /var/secrets/torque.pem
