@@ -6,8 +6,19 @@ inputs:
     default: 0.0.0.0
 outputs: {}
 grains:
+  validate:
+    kind: shell
+    spec:
+      agent:
+        name: adoc-vcenter
+      activities:
+        deploy:
+          commands:
+            - "ls -la"
+
   install-apache:
     kind: ansible
+    depends-on: validate
     spec:
       source:
         store: iac-assets
