@@ -8,7 +8,6 @@ outputs: {}
 grains:
   install-apache:
     kind: ansible
-    depends-on: validate
     spec:
       source:
         store: iac-assets
