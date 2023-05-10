@@ -6,12 +6,13 @@ inputs:
     default: 0.0.0.0
 outputs: {}
 grains:
-  local-task:
+  install-apache:
     kind: ansible
+    depends-on: validate
     spec:
       source:
         store: iac-assets
-        path: ansible/local-task.yml
+        path: ansible/install-apache.yml
       agent:
         name: adoc-vcenter
       inventory-file:
@@ -19,21 +20,5 @@ grains:
           hosts:
             '{{ .inputs.instance_ip }}':
           vars:
-            ansible_connection: local
-
-  # install-apache:
-  #   kind: ansible
-  #   depends-on: validate
-  #   spec:
-  #     source:
-  #       store: iac-assets
-  #       path: ansible/install-apache.yml
-  #     agent:
-  #       name: adoc-vcenter
-  #     inventory-file:
-  #       all:
-  #         hosts:
-  #           '{{ .inputs.instance_ip }}':
-  #         vars:
-  #           ansible_user: centos
-  #           ansible_ssh_private_key_file: /var/secrets/torque.pem
+            ansible_user: centos
+            ansible_ssh_private_key_file: /var/secrets/torque.pem
