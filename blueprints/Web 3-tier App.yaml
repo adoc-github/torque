@@ -15,6 +15,7 @@ inputs:
     description: Instance type
   agent:
     type: agent
+    default: Quali
 
 outputs:
   app_subnet_id:
