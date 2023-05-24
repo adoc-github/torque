@@ -13,13 +13,6 @@ inputs:
     type: string
     default: t2.micro
     description: Instance type
-  security_group_ids:
-    type: string
-    default: '[]'
-  subnet_id:
-    type: string
-    default: subnet-00000000000000000
-    description: Subnet ID
   agent:
     type: agent
 
@@ -54,16 +47,12 @@ grains:
         store: iac-assets
         path: terraform/web-3-tier/network
       agent:
-      # The Torque agent that will be used to provision the environment.
         name: '{{ .inputs.agent }}'
-        # A service account annotated with a role ARN with permissions to run the asset
-        # service-account: <service-account-name>
+      authentication:
+      - adoc-aws-user
       inputs:
       - my_ip: '{{ .inputs.my_ip }}'
       - region: '{{ .inputs.region }}'
-      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
-      # env-vars:
-      # - VAR_NAME: var value
       env-vars: []
       outputs:
       - app_subnet_id
@@ -72,7 +61,6 @@ grains:
       - vpc_id
       - web_security_group_id
       - web_subnet_id
-    # The terraform version that will be used to deploy the module
     tf-version: 1.4.6
 
   adoc-app:
@@ -83,10 +71,9 @@ grains:
         store: iac-assets
         path: terraform/web-3-tier/applications/adoc-app
       agent:
-      # The Torque agent that will be used to provision the environment.
         name: '{{ .inputs.agent }}'
-        # A service account annotated with a role ARN with permissions to run the asset
-        # service-account: <service-account-name>
+      authentication:
+      - adoc-aws-user
       inputs:
       - instance_type: '{{ .inputs.instance_type }}'
       - region: '{{ .inputs.region }}'
