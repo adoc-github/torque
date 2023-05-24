@@ -90,7 +90,7 @@ grains:
       inputs:
       - instance_type: '{{ .inputs.instance_type }}'
       - region: '{{ .inputs.region }}'
-      - security_group_ids: ['{{ .grains.network.outputs.local_security_group_id }}', '{{ .grains.network.outputs.web_security_group_id }}']
+      - security_group_ids: '[{{ .grains.network.outputs.local_security_group_id }}, {{ .grains.network.outputs.web_security_group_id }}]'
       - subnet_id: '{{ .grains.network.outputs.app_subnet_id }}'
       env-vars: []
       outputs:
