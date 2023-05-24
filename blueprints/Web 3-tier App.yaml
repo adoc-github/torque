@@ -1,0 +1,98 @@
+spec_version: 2
+description: Deploy ADOC Application.
+inputs:
+  my_ip:
+    type: string
+    default: 0.0.0.0/0
+    description: This IP for Webapp access
+  region:
+    type: string
+    default: ap-northeast-1
+    description: Region of Webapp
+  instance_type:
+    type: string
+    default: t2.micro
+    description: Instance type
+  security_group_ids:
+    type: string
+    default: '[]'
+  subnet_id:
+    type: string
+    default: subnet-00000000000000000
+    description: Subnet ID
+  agent:
+    type: agent
+
+outputs:
+  app_subnet_id:
+    value: '{{ .grains.network.outputs.app_subnet_id }}'
+    quick: false
+  db_subnet_id:
+    value: '{{ .grains.network.outputs.db_subnet_id }}'
+    quick: false
+  local_security_group_id:
+    value: '{{ .grains.network.outputs.local_security_group_id }}'
+    quick: false
+  vpc_id:
+    value: '{{ .grains.network.outputs.vpc_id }}'
+    quick: false
+  web_security_group_id:
+    value: '{{ .grains.network.outputs.web_security_group_id }}'
+    quick: false
+  web_subnet_id:
+    value: '{{ .grains.network.outputs.web_subnet_id }}'
+    quick: false
+  app:
+    value: '{{ .grains.adoc-app.outputs.app }}'
+    quick: true
+
+grains:
+  network:
+    kind: terraform
+    spec:
+      source:
+        store: iac-assets
+        path: terraform/web-3-tier/network
+      agent:
+      # The Torque agent that will be used to provision the environment.
+        name: '{{ .inputs.agent }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - my_ip: '{{ .inputs.my_ip }}'
+      - region: '{{ .inputs.region }}'
+      # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
+      # env-vars:
+      # - VAR_NAME: var value
+      env-vars: []
+      outputs:
+      - app_subnet_id
+      - db_subnet_id
+      - local_security_group_id
+      - vpc_id
+      - web_security_group_id
+      - web_subnet_id
+    # The terraform version that will be used to deploy the module
+    tf-version: 1.4.6
+
+  adoc-app:
+    kind: terraform
+    depends-on: network
+    spec:
+      source:
+        store: iac-assets
+        path: terraform/web-3-tier/applications/adoc-app
+      agent:
+      # The Torque agent that will be used to provision the environment.
+        name: '{{ .inputs.agent }}'
+        # A service account annotated with a role ARN with permissions to run the asset
+        # service-account: <service-account-name>
+      inputs:
+      - instance_type: '{{ .inputs.instance_type }}'
+      - region: '{{ .inputs.region }}'
+      - security_group_ids: ['{{ .grains.network.outputs.local_security_group_id }}', '{{ .grains.network.outputs.web_security_group_id }}']
+      - subnet_id: '{{ .grains.network.outputs.app_subnet_id }}'
+      env-vars: []
+      outputs:
+      - app
+    tf-version: 1.4.6
