@@ -21,16 +21,33 @@ grains:
   #         vars:
   #           ansible_user: centos
   #           ansible_ssh_private_key_file: /var/secrets/torque.pem
-
+  
   install-apache:
     kind: ansible
     spec:
       source:
         store: iac-assets
-        path: ansible/local-task.yml
+        path: ansible/hello-world.yml
       agent:
         name: adoc-eks
       inventory-file:
         all:
           hosts:
-            '{{ .inputs.instance_ip }}':
+            host1:
+              person_name: John
+            host2:
+          vars:
+            person_name: John
+
+  # install-apache:
+  #   kind: ansible
+  #   spec:
+  #     source:
+  #       store: iac-assets
+  #       path: ansible/local-task.yml
+  #     agent:
+  #       name: adoc-eks
+  #     inventory-file:
+  #       all:
+  #         hosts:
+  #           '{{ .inputs.instance_ip }}':
