@@ -29,7 +29,7 @@ grains:
         store: iac-assets
         path: ansible/hello-world.yml
       agent:
-        name: adoc-eks
+        name: Quali
       inventory-file:
         all:
           hosts:
