@@ -28,7 +28,12 @@ variable "name" {
 }
 
 variable "region" {
-    description = "Region where to create resources" 
-    type = string
-    default = "eu-west-1"
+  description = "Region where to create resources" 
+  type = string
+  default = "ap-northeast-1"
+}
+
+variable "key_name" {
+  description = "Key peir" 
+  type = string
 }
