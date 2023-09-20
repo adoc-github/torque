@@ -20,8 +20,9 @@ resource "aws_instance" "testEC2" {
     associate_public_ip_address = true
     user_data = <<-EOF
       <powershell>
-      echo [InternetShortcut]> C:\torque.url
-      echo URL="https://portal.qtorque.io/login" >> C:\torque.url
+      Set-Location -Path ([System.Environment]::GetFolderPath("Desktop"))
+      echo [InternetShortcut] > torque.url
+      echo URL="https://portal.qtorque.io/login" >> torque.url
       </powershell>
       EOF
     
