@@ -18,7 +18,7 @@ resource "aws_instance" "testEC2" {
     subnet_id = var.subnet_id
     key_name             = var.key_name
     associate_public_ip_address = true
-    user_data = templatefile("install_chrome.ps1")
+    user_data = templatefile("install_chrome.ps1", {})
     
     tags = {
         Name = var.name
