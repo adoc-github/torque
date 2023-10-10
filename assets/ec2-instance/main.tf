@@ -14,17 +14,11 @@ provider "aws" {
 resource "aws_instance" "testEC2" {
     ami = var.ami
     # instance_type = var.instance_type
-    instance_type = "t2.micro"
+    instance_type = var.instance_type
     subnet_id = var.subnet_id
     key_name             = var.key_name
     associate_public_ip_address = true
-    user_data = <<-EOF
-      <powershell>
-      Set-Location -Path ([System.Environment]::GetFolderPath("Desktop"))
-      echo [InternetShortcut] > torque.url
-      echo URL="https://portal.qtorque.io/login" >> torque.url
-      </powershell>
-      EOF
+    user_data = templatefile("install_chrome.ps1")
     
     tags = {
         Name = var.name
