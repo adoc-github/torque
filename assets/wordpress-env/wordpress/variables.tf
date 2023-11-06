@@ -37,3 +37,9 @@ variable "db_password" {
   default = "password"
   description = "Database Password"
 }
+
+variable "name" {
+  type = string
+  default = "wordpress"
+  description = "Resource name"
+}

@@ -14,7 +14,7 @@ provider "aws" {
 
 # セキュリティグループ
 resource "aws_security_group" "wordpress_security_group" {
-  name_prefix = "wordpress"
+  name_prefix = "${var.name}-sg"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -59,4 +59,8 @@ resource "aws_instance" "wordpress_instance" {
 
   # インスタンスに割り当てるセキュリティグループIDを指定
   vpc_security_group_ids = [aws_security_group.wordpress_security_group.id]
+
+  tags = {
+    Name = "${var.name}"
+  }
 }
