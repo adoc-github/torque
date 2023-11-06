@@ -8,6 +8,9 @@ inputs:
   admin_password:
     type: string
     sensitive: true
+  resource_name:
+    type: string
+    default: Demo
   agent:
     type: agent
 # blueprint outputs define which data that was generated during environment provisioning will be returned to the user, API or CI.
@@ -29,6 +32,7 @@ grains:
       inputs:
         - admin_username: '{{ .inputs.admin_username }}'
         - admin_password: '{{ .inputs.admin_password }}'
+        - name: '{{ .inputs.resource_name }}'
       # The environment variables declared in this section will be available during the grain deployment as well as the grain destroy phase
       # env-vars:
       # - VAR_NAME: var value

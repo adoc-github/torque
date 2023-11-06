@@ -9,3 +9,9 @@ variable "admin_password" {
   default = "password"
   type = string
 }
+
+variable "name" {
+  description = "Resource name"
+  default = "Demo"
+  type = string
+}
