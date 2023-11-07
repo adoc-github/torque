@@ -62,7 +62,6 @@ grains:
       - DBName: '{{ .inputs.db_name }}'
       - DBUsername: '{{ .inputs.db_username }}'
       - DBPassword: '{{ .inputs.db_password }}'
-      - Name: '{{ .inputs.db_name }}-{{ sandboxid | downcase }}'
       env-vars: []
       outputs:
       - Endpoint
