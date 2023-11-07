@@ -47,7 +47,7 @@ Resources:
     Type: 'AWS::RDS::DBInstance'
     Properties:
       DBName: !Ref DBName
-      DBInstanceIdentifier: 'wordpress-db-instance'
+      DBInstanceIdentifier: 'example-db-instance'
       Engine: 'mariadb'
       EngineVersion: '10.6.10'
       DBInstanceClass: 'db.t2.micro'
