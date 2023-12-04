@@ -49,7 +49,7 @@ Resources:
     Type: 'AWS::RDS::DBInstance'
     Properties:
       DBName: !Ref DBName
-      DBInstanceIdentifier: 'example-db-instance'
+      DBInstanceIdentifier: !Ref Name
       Engine: 'mariadb'
       EngineVersion: '10.6.10'
       DBInstanceClass: 'db.t2.micro'
